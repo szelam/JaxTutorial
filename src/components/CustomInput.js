@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { Controller } from "react-hook-form";
+import React from "react";
+import { Controller, useFormContext } from "react-hook-form";
 import {
     FormControl,
     InputLabel,
@@ -51,15 +51,16 @@ export const StyledFormHelperText = MUIStyled(FormHelperText)(() => ({
     },
 }));
 export default function CustomInput({
-    control,
     name,
     label,
-    error = false,
     required = false,
     multiline = false,
     number = false,
     width = "100%",
 }) {
+    const { control, formState } = useFormContext();
+    const error = formState.errors[name];
+
     return (
         <Controller
             name={name}

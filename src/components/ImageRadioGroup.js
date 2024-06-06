@@ -1,6 +1,6 @@
 import React from 'react';
 import { FormControlLabel, Radio, RadioGroup, FormControl, FormLabel } from '@mui/material';
-import { Controller } from 'react-hook-form';
+import { Controller, useFormContext } from 'react-hook-form';
 import styled from 'styled-components';
 
 const RadioWrapper = styled.div`
@@ -44,7 +44,8 @@ const RadioGroupWrapper = styled(RadioGroup)`
     gap: 10px;
 `;
 
-export default function ImageRadioGroup({ control, name, options, error }) {
+export default function ImageRadioGroup({ name, options }) {
+    const { control } = useFormContext();
     return (
         <FormControl component="fieldset">
             <Controller

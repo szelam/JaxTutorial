@@ -1,5 +1,5 @@
 import React from "react";
-import { Controller } from "react-hook-form";
+import { Controller, useFormContext } from "react-hook-form";
 import styled from "styled-components";
 import {
     FormHelperText,
@@ -52,7 +52,10 @@ const StyledFormHelperText = MUIStyled(FormHelperText)(() => ({
     color: "#FF0000",
 }));
 
-export default function ImageCheckbox({ control, name, labels, error }) {
+export default function ImageCheckbox({ name, labels }) {
+
+    const { control, formState } = useFormContext();
+    const error = formState.errors[name];
 
     return (
         <CustomFormControl error={!!error} style={{ flexDirection: 'row' }}>

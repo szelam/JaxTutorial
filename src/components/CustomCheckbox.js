@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Checkbox, FormControlLabel, FormHelperText, FormControl } from '@mui/material';
-import { Controller } from 'react-hook-form';
+import { Controller, useFormContext } from 'react-hook-form';
 import { styled as MUIStyled } from '@mui/system';
 import styled from 'styled-components';
 
@@ -57,7 +57,10 @@ const CustomFormControl = MUIStyled(FormControl)(() => ({
     position: 'relative',
 }));
 
-export default function CustomCheckbox({ control, name, labels, error }) {
+export default function CustomCheckbox({ name, labels }) {
+
+    const { control, formState } = useFormContext();
+    const error = formState.errors[name];
 
     return (
         <CustomFormControl error={!!error}>

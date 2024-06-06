@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Controller } from "react-hook-form";
+import { Controller, useFormContext } from "react-hook-form";
 import { styled as MUIStyled } from "@mui/system";
 import { Switch } from "@mui/material";
 
@@ -51,7 +51,8 @@ const CustomSwitch = MUIStyled((props) => (
     },
 }));
 
-export default function CustomToggle({ control, name, on_label = 'true', off_label = 'false', onChange }) {
+export default function CustomToggle({ name, on_label = 'true', off_label = 'false', onChange }) {
+    const { control } = useFormContext();
     return (
         <Controller
             name={name}

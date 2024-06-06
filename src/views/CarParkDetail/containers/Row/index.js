@@ -27,7 +27,6 @@ export default function Row({
     children,
     spacebetween = false,
     tooltip = undefined,
-    wide = false,
 }) {
     const [tooltipOpen, setTooltipOpen] = useState(false);
 
@@ -43,7 +42,7 @@ export default function Row({
         <RowContainer
             style={{ justifyContent: spacebetween ? "space-between" : "left" }}
         >
-            <RowLabel style={{ width: wide ? "346px" : "inherit" }}>
+            <RowLabel>
                 {title}
                 <span style={{ color: "red" }}>{required ? "*" : ""}</span>
                 {tooltip && (

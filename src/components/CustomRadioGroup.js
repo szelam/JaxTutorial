@@ -1,6 +1,6 @@
 import React from 'react';
 import { Radio, FormControlLabel, RadioGroup, FormControl } from '@mui/material';
-import { Controller } from 'react-hook-form';
+import { Controller, useFormContext } from 'react-hook-form';
 import { styled as MUIStyled } from '@mui/system';
 import styled from 'styled-components';
 
@@ -36,7 +36,9 @@ const StyledRadio = MUIStyled(Radio)({
 const RadioWrapper = styled.div`
     padding-left: 10px;
 `;
-export default function CustomRadioGroup({ control, name, labels, error }) {
+export default function CustomRadioGroup({ name, labels }) {
+    const { control, formState } = useFormContext();
+    const error = formState.errors[name];
     return (
         <RadioWrapper>
             <Controller
