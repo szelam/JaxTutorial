@@ -5,16 +5,13 @@ import Row from '../Row';
 import CustomToggle from '../../../../components/CustomToggle';
 import ImageRadioGroup from '../../../../components/ImageRadioGroup';
 
-export default function RightContainer({ control, errors }) {
+export default function RightContainer({ register, control, errors }) {
 
     return (
         <RightPanel>
-            <Row title="Region / District">
+            <Row title="Region / District" required>
                 <CustomSelect
-                    control={control}
-                    name="region"
-                    label="Region / District"
-                    error={errors.region}
+                    {...register("region")}
                 >
                     <option value="1">Option 1</option>
                     <option value="2">Option 2</option>
@@ -63,7 +60,7 @@ export default function RightContainer({ control, errors }) {
                 <Row title="priority">
                     <CustomInput
                         control={control}
-                        name="priority"
+                        name="coverpriority"
                         label="priority"
                         error={errors.coverpriority}
                         width="100px"
@@ -84,7 +81,7 @@ export default function RightContainer({ control, errors }) {
                 <Row title="priority">
                     <CustomInput
                         control={control}
-                        name="priority"
+                        name="evchargepriority"
                         label="priority"
                         error={errors.evchargepriority}
                         width="100px"
@@ -104,7 +101,7 @@ export default function RightContainer({ control, errors }) {
                 <Row title="priority">
                     <CustomInput
                         control={control}
-                        name="priority"
+                        name="bookingpriority"
                         label="priority"
                         error={errors.bookingpriority}
                         width="100px"

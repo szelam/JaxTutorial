@@ -34,40 +34,35 @@ const StyledRadio = MUIStyled(Radio)({
 });
 
 const RadioWrapper = styled.div`
-display: flex;
-position: relative;
-align - items: center;
-cursor: pointer;
-user - select: none;
-padding - left: 30px;
-transition: all 300ms ease -in -out 0s;
-flex - grow: 1;
-flex - basis: 25 %;
+    padding-left: 10px;
 `;
 
 export default function CustomRadioGroup({ control, name, labels, error }) {
     return (
-        <Controller
-            rules={{ required: true }}
-            control={control}
-            name={name}
-            error={error}
-            render={({ field }) => (
-                <FormControl component="fieldset">
-                    <RadioGroup row>
+        <RadioWrapper>
+            <Controller
+                rules={{ required: true }}
+                control={control}
+                name={name}
+                error={error}
+                defaultValue={labels[0]}
+                render={({ field }) => (
+                    <FormControl component="fieldset">
+                        <RadioGroup row>
 
-                        {labels.map((label) => (
-                            <StyledFormControlLabel
-                                key={label}
-                                value={label.toLowerCase()}
-                                control={<StyledRadio />}
-                                label={label}
-                            />
-                        ))}
-                    </RadioGroup>
-                </FormControl>
-            )
-            }
-        />
+                            {labels.map((label) => (
+                                <StyledFormControlLabel
+                                    key={label}
+                                    value={label.toLowerCase()}
+                                    control={<StyledRadio />}
+                                    label={label}
+                                />
+                            ))}
+                        </RadioGroup>
+                    </FormControl>
+                )
+                }
+            />
+        </RadioWrapper>
     );
 }

@@ -50,7 +50,6 @@ export const StyledFormHelperText = MUIStyled(FormHelperText)(() => ({
         color: "#FF0000",
     },
 }));
-
 export default function CustomInput({
     control,
     name,
@@ -61,17 +60,15 @@ export default function CustomInput({
     number = false,
     width = "100%",
 }) {
-    useEffect(() => {
-        console.log(!!error);
-    }, [error]);
-
     return (
         <Controller
             name={name}
             control={control}
-            render={({ field }) => (
-                <StyledFormControl variant="outlined" error={!!error} width={width}>
-                    <StyledInputLabel htmlFor={`outlined-${name}`} error={!!error}>
+            error={!!error}
+            required={required}
+            render={({ field, fieldState }) => (
+                <StyledFormControl variant="outlined" error={!!fieldState.error} width={width}>
+                    <StyledInputLabel htmlFor={`outlined-${name}`} error={!!fieldState.error}>
                         {label}
                     </StyledInputLabel>
                     <StyledOutlinedInput
@@ -79,14 +76,13 @@ export default function CustomInput({
                         id={`outlined-${name}`}
                         type="text"
                         label={label}
-                        error={!!error}
+                        error={!!fieldState.error}
                         multiline={multiline}
                         minRows={4}
                         onChange={(e) => {
                             if (number) {
                                 let val = e.target.value;
                                 if (val.startsWith("0") || val === "" || /[a-zA-Z]/.test(val)) {
-                                    console.log("hi");
                                     field.onChange("");
                                     return;
                                 }
@@ -95,11 +91,13 @@ export default function CustomInput({
                                 }
                                 let numval = Number(val);
                                 field.onChange(isNaN(numval) ? field.value : numval);
+                            } else {
+                                field.onChange(e.target.value);
                             }
                         }}
                     />
-                    {!!error && (
-                        <StyledFormHelperText>{error.message}</StyledFormHelperText>
+                    {!!fieldState.error && (
+                        <StyledFormHelperText>{fieldState.error.message}</StyledFormHelperText>
                     )}
                 </StyledFormControl>
             )}

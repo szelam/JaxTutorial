@@ -50,6 +50,7 @@ export default function ImageRadioGroup({ control, name, options, error }) {
             <Controller
                 name={name}
                 control={control}
+                defaultValue={options[0].label}
                 render={({ field }) => (
                     <RadioGroupWrapper {...field} row>
                         {options.map((option, index) => (

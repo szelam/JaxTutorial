@@ -1,5 +1,5 @@
-import React from 'react';
-import { Checkbox, FormControlLabel } from '@mui/material';
+import React, { useEffect } from 'react';
+import { Checkbox, FormControlLabel, FormHelperText, FormControl } from '@mui/material';
 import { Controller } from 'react-hook-form';
 import { styled as MUIStyled } from '@mui/system';
 import styled from 'styled-components';
@@ -7,11 +7,10 @@ import styled from 'styled-components';
 const StyledCheckbox = MUIStyled(Checkbox)({
     border: '2px solid rgb(219, 219, 219)',
     borderRadius: '5px',
-    width: '20px',
-    height: '20px',
+    width: '22px',
+    height: '22px',
     transition: 'all 300ms ease-in-out 0s',
     marginRight: '10px',
-    padding: '0px',
 
     '&.Mui-checked': {
         color: '#21BFBC',
@@ -39,24 +38,59 @@ const CheckboxWrapper = styled.div`
     flex-basis: 25%;
 `;
 
-export default function CustomCheckbox({ control, name, label, error }) {
+const StyledFormHelperText = MUIStyled(FormHelperText)(() => ({
+    position: "absolute",
+    bottom: "0",
+    transform: "translateY(100%)",
+    color: "#FF0000",
+}));
+
+const CustomFormControl = MUIStyled(FormControl)(() => ({
+    display: 'flex',
+    flexWrap: 'wrap',
+    cursor: 'pointer',
+    gap: '10px',
+    paddingLeft: '20px',
+    alignItems: 'flex-start',
+    flexDirection: 'row',
+    width: '100%',
+    position: 'relative',
+}));
+
+export default function CustomCheckbox({ control, name, labels, error }) {
+
     return (
-        <CheckboxWrapper>
+        <CustomFormControl error={!!error}>
             <Controller
                 name={name}
                 control={control}
-                render={({ field }) => (
-                    <FormControlLabel
-                        control={
-                            <StyledCheckbox
-                                {...field}
-                                color="primary"
-                            />
-                        }
-                        label={label}
-                    />
+                defaultValue={[]}
+                error={error}
+                render={({ field: { onChange, value } }) => (
+                    <>
+                        {labels.map((label, index) => (
+                            <CheckboxWrapper key={index}>
+                                <FormControlLabel
+                                    control={
+                                        <StyledCheckbox
+                                            checked={value.includes(label)}
+                                            onChange={(e) => {
+                                                if (e.target.checked) {
+                                                    onChange([...value, label]);
+                                                } else {
+                                                    onChange(value.filter((v) => v !== label));
+                                                }
+                                            }}
+                                        />
+                                    }
+                                    label={label}
+                                />
+                            </CheckboxWrapper>
+                        ))}
+                    </>
                 )}
             />
-        </CheckboxWrapper>
+            {!!error && <StyledFormHelperText>{error.message}</StyledFormHelperText>}
+        </CustomFormControl>
     );
 }

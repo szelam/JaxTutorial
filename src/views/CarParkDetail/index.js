@@ -19,17 +19,22 @@ export default function CarParkDetail() {
     handleSubmit,
     watch,
     setValue,
+    register,
     formState: { errors },
   } = useForm({
-    defaultValues: {},
+    defaultValues: {
+    },
     resolver: yupResolver(schema),
   });
+
 
   const onSubmit = (data) => {
     console.log(data);
   };
 
-  const onError = (errors, e) => console.log(errors, e);
+  const onError = (errors, e) => {
+    console.log(errors, e);
+  }
 
   return (
     <Container>
@@ -39,8 +44,8 @@ export default function CarParkDetail() {
           <CustomSecondaryButton>Back</CustomSecondaryButton>
         </ActionRow>
         <SwitchContainer>
-          <LeftContainer control={control} errors={errors} />
-          <RightContainer control={control} errors={errors} />
+          <LeftContainer register={register} control={control} errors={errors} />
+          <RightContainer register={register} control={control} errors={errors} />
         </SwitchContainer>
         <TncContainer control={control} errors={errors} watch={watch} setValue={setValue} />
       </form>

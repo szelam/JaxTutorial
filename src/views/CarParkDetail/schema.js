@@ -12,27 +12,21 @@ const schema = Yup.object().shape({
     email: Yup.string().email('invalid email format').required('required'),
     hotline: Yup.string().required('required').matches(/^[456789][0-9]{7}$/, 'invalid phone number'),
     noticeemail: Yup.string().email('invalid email format').required('required'),
-    suitablefor: Yup.object().shape({
-        car: Yup.boolean().default(false),
-        oldcar: Yup.boolean().default(false),
-        motorcycle: Yup.boolean().default(false),
-    }),
-    paymentmethods: Yup.object().shape({
-        cash: Yup.boolean().default(false),
-        octopus: Yup.boolean().default(false),
-    }),
-    restrictions: Yup.object().shape({
-        no: Yup.boolean().default(false),
-        owners: Yup.boolean().default(false),
-        parkers: Yup.boolean().default(false),
-        visitors: Yup.boolean().default(false),
-        resident: Yup.boolean().default(false),
-    }),
+    suitablefor: Yup.array()
+        .of(Yup.string())
+        .min(1, 'required')
+        .required('required'),
+    paymentmethods: Yup.array()
+        .of(Yup.string()),
+    restrictions: Yup.array()
+        .of(Yup.string())
+        .min(1, 'required')
+        .required('required'),
     accesstype: Yup.string(),
     headroom: Yup.string().required('required'),
     servicetag: Yup.string().required('required'),
-    buildtageng: Yup.string().required('required'),
-    buildtagchi: Yup.string().required('required'),
+    buildtageng: Yup.string(),
+    buildtagchi: Yup.string(),
     servicetypeeng: Yup.string().required('required'),
     servicetypechi: Yup.string().required('required'),
     remarkeng: Yup.string(),

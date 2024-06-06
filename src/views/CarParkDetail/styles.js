@@ -71,6 +71,7 @@ export const RowChildrenContainer = styled.div`
     flex-direction: row;
     gap: 0.5rem;
     width: 100%;
+    align-items: center;
 `
 
 export const RowBackgroundWrapper = styled.div`
@@ -129,21 +130,6 @@ export const Title = styled.h1`
     color: #21BFBC;
     font-weight: 400;
     margin: 30px 0px;
-`
-
-export const CustomCheckboxContainer = styled.div`
-    display: flex;
-    flex-wrap: wrap;
-    cursor: pointer;
-    opacity: 1;
-    gap: 10px;
-    align-items: flex-start;
-`
-
-export const ImageCheckboxContainer = styled.div`
-    display: flex;
-    gap: 10px;
-    width: 100%;
 `
 
 export const CustomCheckbox = styled.label`

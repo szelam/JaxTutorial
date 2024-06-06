@@ -1,13 +1,14 @@
 import React from 'react';
-import { LeftPanel, CustomSelect, CustomCheckboxContainer, ImageCheckboxContainer } from '../../styles';
+import { LeftPanel, CustomSelect } from '../../styles';
 import CustomInput from '../../../../components/CustomInput';
 import CustomToggle from '../../../../components/CustomToggle';
 import CustomCheckbox from '../../../../components/CustomCheckbox';
 import Row from '../Row';
 import CustomRadioGroup from '../../../../components/CustomRadioGroup';
 import ImageCheckbox from '../../../../components/ImageCheckbox';
+import CustomAddButton from './containers/CustomAddButton';
 
-export default function LeftContainer({ control, errors }) {
+export default function LeftContainer({ register, control, errors }) {
     return (
 
         <LeftPanel>
@@ -46,10 +47,7 @@ export default function LeftContainer({ control, errors }) {
             </Row>
             <Row title="Carpark Type" required>
                 <CustomSelect
-                    control={control}
-                    name="type"
-                    label="Carpark Type"
-                    error={errors.type}
+                    {...register("type")}
                 >
                     <option value="1">Option 1</option>
                     <option value="2">Option 2</option>
@@ -57,10 +55,7 @@ export default function LeftContainer({ control, errors }) {
             </Row>
             <Row title="Carpark management">
                 <CustomSelect
-                    control={control}
-                    name="management"
-                    label="Carpark management"
-                    error={errors.management}
+                    {...register("management")}
                 >
                     <option value="1">Option 1</option>
                     <option value="2">Option 2</option>
@@ -68,10 +63,7 @@ export default function LeftContainer({ control, errors }) {
             </Row>
             <Row title="Carpark telephone" required>
                 <CustomSelect
-                    control={control}
-                    name="telephonesuffix"
-                    label="Carpark telephone"
-                    error={errors.telephonesuffix}
+                    {...register("telephonesuffix")}
                 >
                     <option value="1">Option 1</option>
                     <option value="2">Option 2</option>
@@ -91,6 +83,7 @@ export default function LeftContainer({ control, errors }) {
                     label=""
                     error={errors.email}
                 />
+                <CustomAddButton />
             </Row>
             <Row title="CarPark Notice Hotline">
                 <CustomInput
@@ -110,87 +103,32 @@ export default function LeftContainer({ control, errors }) {
                 />
             </Row>
             <Row title="Space suitable for" required>
-                <ImageCheckboxContainer>
-                    <ImageCheckbox
-                        control={control}
-                        name="suitablefor.car"
-                        label="Private Car"
-                        imageSrc="/img/motor1.png"
-                        error={errors.suitablefor}
-                    />
-                    <ImageCheckbox
-                        control={control}
-                        name="suitablefor.oldcar"
-                        label="Private Car (Old)"
-                        imageSrc="/img/motor2.png"
-                        error={errors.suitablefor}
-                    />
-                    <ImageCheckbox
-                        control={control}
-                        name="suitablefor.motorcycle"
-                        label="Motorcycle (Old)"
-                        imageSrc="/img/motor3.png"
-                        error={errors.suitablefor}
-                    />
-                </ImageCheckboxContainer>
+                <ImageCheckbox
+                    control={control}
+                    name="suitablefor"
+                    labels={[
+                        ['car', 'Private Car', '/img/motor1.png'],
+                        ['oldcar', 'Private Car (Old)', '/img/motor3.png'],
+                        ['motorcycle', 'Motorcycle (Old)', '/img/motor2.png'],]
+                    }
+                    error={errors.suitablefor}
+                />
             </Row>
             <Row title="Payment Methods">
-                <CustomCheckboxContainer>
-                    <CustomCheckbox
-                        control={control}
-                        name="paymentmethods.octopus"
-                        label="Octopus Card 八達通"
-                        error={errors.paymentmethods}
-                    >
-                    </CustomCheckbox>
-                    <CustomCheckbox
-                        control={control}
-                        name="paymentmethods.cash"
-                        label="Cash 現金"
-                        error={errors.paymentmethods}
-                    >
-                    </CustomCheckbox>
-                </CustomCheckboxContainer>
+                <CustomCheckbox
+                    control={control}
+                    name="paymentmethods"
+                    labels={['Octopus Card 八達通', 'Cash 現金']}
+                    error={errors.paymentmethods}
+                />
             </Row>
             <Row title="Restrictions" required>
-                <CustomCheckboxContainer>
-                    <CustomCheckbox
-                        control={control}
-                        name="restrictions.no"
-                        label="no"
-                        error={errors.restrictions}
-                    >
-                    </CustomCheckbox>
-                    <CustomCheckbox
-                        control={control}
-                        name="restrictions.owners"
-                        label="owners"
-                        error={errors.restrictions}
-                    >
-                    </CustomCheckbox>
-                    <CustomCheckbox
-                        control={control}
-                        name="restrictions.parkers"
-                        label="parkers"
-                        error={errors.restrictions}
-                    >
-                    </CustomCheckbox>
-                    <CustomCheckbox
-                        control={control}
-                        name="restrictions.visitors"
-                        label="visitors"
-                        error={errors.restrictions}
-                    >
-                    </CustomCheckbox>
-                    <CustomCheckbox
-                        control={control}
-                        name="restrictions.resident"
-                        label="resident"
-                        error={errors.restrictions}
-                    >
-                    </CustomCheckbox>
-                </CustomCheckboxContainer>
-
+                <CustomCheckbox
+                    control={control}
+                    name="restrictions"
+                    error={errors.restrictions}
+                    labels={['no', 'owners', 'parkers', 'visitors', 'resident']}
+                />
             </Row>
             <Row title="Access Type" required>
                 <CustomRadioGroup
@@ -202,10 +140,7 @@ export default function LeftContainer({ control, errors }) {
             </Row>
             <Row title="Headroom" required>
                 <CustomSelect
-                    control={control}
-                    name="headroom"
-                    label="Headroom"
-                    error={errors.headroom}
+                    {...register("headroom")}
                 >
                     <option value="1">Option 1</option>
                     <option value="2">Option 2</option>
@@ -213,10 +148,7 @@ export default function LeftContainer({ control, errors }) {
             </Row>
             <Row title="Service Tags">
                 <CustomSelect
-                    control={control}
-                    name="servicetag"
-                    label="Service Tags"
-                    error={errors.servicetag}
+                    {...register("servicetag")}
                 >
                     <option value="1">Option 1</option>
                     <option value="2">Option 2</option>
@@ -224,10 +156,7 @@ export default function LeftContainer({ control, errors }) {
             </Row>
             <Row title="Building Tags for OCR Check (Eng)">
                 <CustomSelect
-                    control={control}
-                    name="buildtageng"
-                    label="Building Tags for OCR Check (Eng)"
-                    error={errors.servicetageng}
+                    {...register("buildtageng")}
                 >
                     <option value="1">Option 1</option>
                     <option value="2">Option 2</option>
@@ -235,10 +164,7 @@ export default function LeftContainer({ control, errors }) {
             </Row>
             <Row title="Building Tags for OCR Check (Chi)">
                 <CustomSelect
-                    control={control}
-                    name="buildtagchi"
-                    label="Building Tags for OCR Check (Chi)"
-                    error={errors.servicetagchi}
+                    {...register("buildtagchi")}
                 >
                     <option value="1">Option 1</option>
                     <option value="2">Option 2</option>
