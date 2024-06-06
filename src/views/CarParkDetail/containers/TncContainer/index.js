@@ -14,12 +14,12 @@ export default function TncContainer({ control, errors, watch, setValue }) {
             <Row title="Customize Content" wide>
                 <CustomToggle
                     control={control}
-                    name="customcontent"
+                    name="tnc"
                     label="Customize Content"
                     on_label="Yes"
                     off_label="No"
                     onChange={(e) => setCustomize(e)}
-                    error={errors.customcontent}
+                    error={errors.tnc}
                 />
             </Row>
             <Row title='Eng' style={{ opacity: customize ? 1 : 0.3 }} wide >
