@@ -52,7 +52,7 @@ const StyledFormHelperText = MUIStyled(FormHelperText)(() => ({
     color: "#FF0000",
 }));
 
-export default function ImageCheckbox({ name, labels }) {
+export default function ImageCheckboxGroup({ name, labels }) {
 
     const { control, formState } = useFormContext();
     const error = formState.errors[name];

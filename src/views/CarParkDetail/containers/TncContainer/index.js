@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Title } from "../../styles";
 import Row from "../Row";
 import CustomToggle from "../../../../components/CustomToggle";

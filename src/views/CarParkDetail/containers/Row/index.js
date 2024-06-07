@@ -42,21 +42,23 @@ export default function Row({
         <RowContainer
             style={{ justifyContent: spacebetween ? "space-between" : "left" }}
         >
-            <RowLabel>
-                {title}
-                <span style={{ color: "red" }}>{required ? "*" : ""}</span>
-                {tooltip && (
-                    <StyledTooltip
-                        open={tooltipOpen}
-                        onClose={handleTooltipClose}
-                        title={tooltip}
-                        arrow
-                        placement="top"
-                    >
-                        <TooltipCircle onClick={handleTooltipOpen}>!</TooltipCircle>
-                    </StyledTooltip>
-                )}
-            </RowLabel>
+            {title && (
+                <RowLabel>
+                    {title}
+                    <span style={{ color: "red" }}>{required ? "*" : ""}</span>
+                    {tooltip && (
+                        <StyledTooltip
+                            open={tooltipOpen}
+                            onClose={handleTooltipClose}
+                            title={tooltip}
+                            arrow
+                            placement="top"
+                        >
+                            <TooltipCircle onClick={handleTooltipOpen}>!</TooltipCircle>
+                        </StyledTooltip>
+                    )}
+                </RowLabel>
+            )}
             <RowChildrenContainer
                 style={{ width: spacebetween ? "inherit" : "100%" }}
             >

@@ -1,7 +1,6 @@
 import React from 'react';
 import { IconButton } from '@mui/material';
 import { styled as MUIStyled } from '@mui/system';
-import { Add } from '@mui/icons-material';
 
 const StyledIconButton = MUIStyled(IconButton)({
     backgroundColor: '#21BFBC',
@@ -16,10 +15,10 @@ const StyledIconButton = MUIStyled(IconButton)({
     }
 });
 
-export default function CustomAddButton({ onClick }) {
+export default function CustomIconButton({ onClick, children }) {
     return (
         <StyledIconButton onClick={onClick} disableRipple>
-            <Add />
+            {children}
         </StyledIconButton>
     )
 }

@@ -3,11 +3,21 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { ThemeProvider } from 'styled-components';
+import { ThemeProvider as MUIThemeProvider, createTheme } from '@mui/material';
+import theme from './constants/themes';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
+const MUI_theme = createTheme(theme);
+
 root.render(
   <React.StrictMode>
-    <App />
+    <MUIThemeProvider theme={MUI_theme}>
+      <ThemeProvider theme={theme}>
+        <App />
+      </ThemeProvider>
+    </MUIThemeProvider>
   </React.StrictMode>
 );
 

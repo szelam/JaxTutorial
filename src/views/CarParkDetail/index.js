@@ -14,7 +14,10 @@ import schema from "./schema";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 export default function CarParkDetail() {
-  const methods = useForm({ resolver: yupResolver(schema) });
+  const methods = useForm({
+    resolver: yupResolver(schema),
+    defaultValues: schema.cast(),
+  });
 
   const onSubmit = (data) => {
     console.log(data);
@@ -22,7 +25,7 @@ export default function CarParkDetail() {
 
   const onError = (errors, e) => {
     console.log(errors, e);
-  }
+  };
 
   return (
     <Container>
@@ -38,7 +41,6 @@ export default function CarParkDetail() {
           </SwitchContainer>
           <TncContainer />
         </form>
-
       </FormProvider>
     </Container>
   );

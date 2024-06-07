@@ -97,7 +97,7 @@ export const RowImg = styled.img`
 
 export const CustomSelect = styled.select`
 border-radius: 15px;
-border: 1px solid #B7B7B7;
+border: 1px solid #DBDBDB;
 color: black;
 width: 100%;
 height: 56px;
@@ -132,8 +132,8 @@ export const Title = styled.h1`
     font-weight: 400;
     margin: 30px 0px;
 `
-
-export const CustomCheckbox = styled.label`
+/* 
+export const CustomCheckboxGroup = styled.label`
     display: flex;
     position: relative;
     align-items: center;
@@ -143,4 +143,4 @@ export const CustomCheckbox = styled.label`
     transition: all 300ms ease-in-out 0s;
     flex-grow: 1;
     flex-basis: 25%;
-`
+` */

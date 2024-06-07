@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { styled as MUIStyled } from "@mui/system";
 import { Switch } from "@mui/material";

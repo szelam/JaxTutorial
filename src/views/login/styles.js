@@ -118,7 +118,7 @@ export const StyledFormControl = MUIStyled(FormControl)(() => ({
 
 export const StyledInputLabel = MUIStyled(InputLabel)(({ theme, error }) => ({
   "&.MuiInputLabel-root": {
-    color: error ? "#FF0000" : "#B7B7B7",
+    color: error ? "#FF0000" : "#DBDBDB",
   },
   "&.Mui-focused": {
     color: "#21BFBC",
@@ -129,7 +129,7 @@ export const StyledOutlinedInput = MUIStyled(OutlinedInput)(
   ({ theme, error }) => ({
     "&.MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
       borderRadius: "15px",
-      borderColor: error ? "#FF0000" : "#B7B7B7",
+      borderColor: error ? "#FF0000" : "#DBDBDB",
     },
     "&.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline": {
       borderColor: error ? "#FF0000" : "#21BFBC",

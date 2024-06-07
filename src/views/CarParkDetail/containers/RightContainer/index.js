@@ -12,9 +12,11 @@ import Row from "../Row";
 import CustomToggle from "../../../../components/CustomToggle";
 import ImageRadioGroup from "../../../../components/ImageRadioGroup";
 import { useFormContext } from "react-hook-form";
+import GMap from "./container/Map";
+import SyncedMapInput from "./container/SyncedMapInput";
 
 export default function RightContainer() {
-    const { register } = useFormContext();
+    const { register, setValue, watch } = useFormContext();
 
     return (
         <RightPanel>
@@ -31,9 +33,21 @@ export default function RightContainer() {
                 <CustomInput name="addresschi" label="Address Title (Chi)" />
             </Row>
             <Row title="Address Details" required>
-                <CustomInput name="addressdetails" label="Address Details" multiline />
+                <SyncedMapInput
+                    onEnter={(pos, address) => {
+                        setValue("addresspos", pos);
+                        setValue("addressdetails", address);
+                    }}
+                />
             </Row>
-            <RowImg src="/img/map.jpg" alt="placeholder"></RowImg>
+            <GMap
+                onDragEnd={(pos, address) => {
+                    setValue("addresspos", pos);
+                    setValue("addressdetails", address);
+                }}
+                center={watch("addresspos")}
+                marker={watch("addresspos")}
+            />
             <Title>Features</Title>
             <RowBackgroundWrapper>
                 <Row title="Cover" required>

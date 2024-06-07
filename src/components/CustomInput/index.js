@@ -1,63 +1,20 @@
-import React from "react";
+import React, { forwardRef } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import {
-    FormControl,
-    InputLabel,
-    OutlinedInput,
-    FormHelperText,
-} from "@mui/material";
-import { styled as MUIStyled } from "@mui/system";
+    StyledFormControl,
+    StyledInputLabel,
+    StyledOutlinedInput,
+    StyledFormHelperText,
+} from "./styles";
 
-export const StyledFormControl = MUIStyled(FormControl)(({ width }) => ({
-    width: width,
-}));
-
-export const StyledInputLabel = MUIStyled(InputLabel)(({ theme, error }) => ({
-    "&.MuiInputLabel-root": {
-        color: error ? "#FF0000" : "#B7B7B7",
-    },
-    "&.Mui-focused": {
-        color: "#21BFBC",
-    },
-}));
-
-export const StyledOutlinedInput = MUIStyled(OutlinedInput)(
-    ({ theme, error }) => ({
-
-        "#outlined-addressdetails": {
-            transition: 'all 300ms ease 0s',
-        },
-
-        "&.MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
-            borderRadius: "15px",
-            borderColor: error ? "#FF0000" : "#B7B7B7",
-        },
-        "&.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline": {
-            borderColor: error ? "#FF0000" : "#21BFBC",
-        },
-        "&.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
-            border: "1px solid #21BFBC",
-        },
-    })
-);
-
-export const StyledFormHelperText = MUIStyled(FormHelperText)(() => ({
-    position: "absolute",
-    bottom: "0",
-    transform: "translateY(100%)",
-
-    "&.Mui-error": {
-        color: "#FF0000",
-    },
-}));
-export default function CustomInput({
+const CustomInput = forwardRef(({
     name,
     label,
     required = false,
     multiline = false,
     number = false,
     width = "100%",
-}) {
+}, ref) => {
     const { control, formState } = useFormContext();
     const error = formState.errors[name];
 
@@ -65,8 +22,6 @@ export default function CustomInput({
         <Controller
             name={name}
             control={control}
-            error={!!error}
-            required={required}
             render={({ field, fieldState }) => (
                 <StyledFormControl variant="outlined" error={!!fieldState.error} width={width}>
                     <StyledInputLabel htmlFor={`outlined-${name}`} error={!!fieldState.error}>
@@ -80,6 +35,7 @@ export default function CustomInput({
                         error={!!fieldState.error}
                         multiline={multiline}
                         minRows={4}
+                        inputRef={ref}
                         onChange={(e) => {
                             if (number) {
                                 let val = e.target.value;
@@ -104,4 +60,6 @@ export default function CustomInput({
             )}
         />
     );
-}
+});
+
+export default CustomInput;
