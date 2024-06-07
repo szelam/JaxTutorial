@@ -20,10 +20,12 @@ export default function CarParkDetail() {
   });
 
   const onSubmit = (data) => {
+    alert('Submitted');
     console.log(data);
   };
 
   const onError = (errors, e) => {
+    alert('Submitted with errors');
     console.log(errors, e);
   };
 

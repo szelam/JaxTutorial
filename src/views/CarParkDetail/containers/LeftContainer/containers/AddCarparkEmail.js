@@ -26,7 +26,7 @@ export default function AddCarparkEmail() {
             {fields.map((field, index) => (
                 <Row key={field.id} title={`Carpark E-mail ${index + 1}`}>
                     <CustomInput
-                        name={`emails[${index}].email`}
+                        name={`emails[${index}]`}
                         label=""
                     />
                     {index === 0 ? (

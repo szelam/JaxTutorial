@@ -17,7 +17,7 @@ export default function GMap({
 
     const { isLoaded } = useLoadScript({
         googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_KEY,
-        libraries: ['places', 'geometry'],
+        libraries: ['places'],
         region: "hk",
     });
 

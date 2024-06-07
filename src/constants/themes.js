@@ -1,3 +1,4 @@
+import { createGlobalStyle } from "styled-components";
 
 const theme = {
     palette: {
@@ -11,6 +12,9 @@ const theme = {
         error: {
             main: "#FF0000",
         },
+        text: {
+            primary: "#504F4F",
+        }
     },
 };
 

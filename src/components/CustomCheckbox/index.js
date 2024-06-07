@@ -2,9 +2,9 @@ import React from "react";
 import { FormControlLabel } from "@mui/material";
 import { CheckboxWrapper, StyledCheckbox } from "./styles";
 
-export default function CustomCheckbox({ key = "", label = "", checked = false, onChange = () => { } }) {
+export default function CustomCheckbox({ props, label = "", checked = false, onChange = () => { } }) {
     return (
-        <CheckboxWrapper key={key}>
+        <CheckboxWrapper {...props}>
             <FormControlLabel
                 control={
                     <StyledCheckbox

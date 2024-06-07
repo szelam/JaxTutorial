@@ -15,7 +15,7 @@ export default function GeneralInfo() {
         <>
 
             <Row title="Status">
-                <CustomToggle name="status" on_label="Active" off_label="Inactive" />
+                <CustomToggle name="status" labels={["Active", "Inactive"]} />
             </Row>
             <Row title="Carpark ID">663132e7f98626402db282d8</Row>
             <Row title="Carpark Name (Eng)" required>
@@ -130,7 +130,7 @@ export default function GeneralInfo() {
                 title="Sync to SHKP System for Monthly Occupancy Status"
                 tooltip="Sync on 1st day every month at 10AM (Spaces with multiple car types are not supported)"
             >
-                <CustomToggle name="sync" on_label="On" off_label="Off" />
+                <CustomToggle name="sync" labels={["On", "Off"]} />
             </Row>
             <Row title="Parking Contractor">
                 <CustomSelect name="contractor" label="Parking Contractor">

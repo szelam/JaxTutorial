@@ -7,6 +7,7 @@ export const StyledCheckbox = MUIStyled(Checkbox)(({ theme }) => ({
     borderRadius: '5px',
     width: '22px',
     height: '22px',
+    marginLeft: '18px',
     transition: 'all 300ms ease-in-out 0s',
     marginRight: '10px',
 

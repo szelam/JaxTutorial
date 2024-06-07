@@ -16,7 +16,7 @@ const CustomFormControl = MUIStyled(FormControl)(() => ({
     flexWrap: 'wrap',
     cursor: 'pointer',
     gap: '10px',
-    paddingLeft: '20px',
+    // paddingLeft: '20px',
     alignItems: 'flex-start',
     flexDirection: 'row',
     width: '100%',

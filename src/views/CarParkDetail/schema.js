@@ -9,9 +9,9 @@ const schema = Yup.object().shape({
     management: Yup.string().default('1'),
     telephonesuffix: Yup.string().required('required').default('1'),
     telephone: Yup.string().required('required').default('').matches(/^[456789][0-9]{7}$/, 'invalid phone number'),
-    emails: Yup.array().of(Yup.string().email('invalid email format')).default(['Super']),
-    hotline: Yup.string().required('required').default('').matches(/^[456789][0-9]{7}$/, 'invalid phone number'),
-    noticeemail: Yup.string().email('invalid email format').required('required').default(''),
+    emails: Yup.array().of(Yup.string().email('invalid email format')).default([' ']),
+    hotline: Yup.string().default('').matches(/^[456789][0-9]{7}$/, 'invalid phone number'),
+    noticeemail: Yup.string().email('invalid email format').default(''),
     suitablefor: Yup.array()
         .of(Yup.string())
         .min(1, 'required')
@@ -55,13 +55,13 @@ const schema = Yup.object().shape({
     tnceng: Yup.string(),
     tncchi: Yup.string(),
     openinghours: Yup.object().shape({
-        mon: Yup.object().shape({ start: Yup.string().required('required').default('00:00'), end: Yup.string().required('required').default('23:59') }),
-        tue: Yup.object().shape({ start: Yup.string().required('required').default('00:00'), end: Yup.string().required('required').default('23:59') }),
-        wed: Yup.object().shape({ start: Yup.string().required('required').default('00:00'), end: Yup.string().required('required').default('23:59') }),
-        thu: Yup.object().shape({ start: Yup.string().required('required').default('00:00'), end: Yup.string().required('required').default('23:59') }),
-        fri: Yup.object().shape({ start: Yup.string().required('required').default('00:00'), end: Yup.string().required('required').default('23:59') }),
-        sat: Yup.object().shape({ start: Yup.string().required('required').default('00:00'), end: Yup.string().required('required').default('23:59') }),
-        sun: Yup.object().shape({ start: Yup.string().required('required').default('00:00'), end: Yup.string().required('required').default('23:59') }),
+        Monday: Yup.object().shape({ start: Yup.string().required('required').default('00:00'), end: Yup.string().required('required').default('23:59') }),
+        Tuesday: Yup.object().shape({ start: Yup.string().required('required').default('00:00'), end: Yup.string().required('required').default('23:59') }),
+        Wednesday: Yup.object().shape({ start: Yup.string().required('required').default('00:00'), end: Yup.string().required('required').default('23:59') }),
+        Thursday: Yup.object().shape({ start: Yup.string().required('required').default('00:00'), end: Yup.string().required('required').default('23:59') }),
+        Friday: Yup.object().shape({ start: Yup.string().required('required').default('00:00'), end: Yup.string().required('required').default('23:59') }),
+        Saturday: Yup.object().shape({ start: Yup.string().required('required').default('00:00'), end: Yup.string().required('required').default('23:59') }),
+        Sunday: Yup.object().shape({ start: Yup.string().required('required').default('00:00'), end: Yup.string().required('required').default('23:59') }),
     }),
 });
 

@@ -2,10 +2,9 @@ import React from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { styled as MUIStyled } from "@mui/system";
 import { Switch } from "@mui/material";
-
-const CustomSwitch = MUIStyled((props) => (
-    <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
-))(({ theme, checked, on_label, off_label }) => ({
+const CustomSwitch = MUIStyled(React.forwardRef((props, ref) => (
+    <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple ref={ref} {...props} />
+)))(({ checked, labels }) => ({
     width: 105,
     height: 40,
     padding: 0,
@@ -37,13 +36,13 @@ const CustomSwitch = MUIStyled((props) => (
         justifyContent: 'space-between',
         padding: '0 10px',
         '&:before': {
-            content: checked ? `"${on_label}"` : '""',
+            content: checked ? `"${labels[0]}"` : '""',
             color: '#fff',
             fontSize: 12,
             fontWeight: 600,
         },
         '&:after': {
-            content: !checked ? `"${off_label}"` : '""',
+            content: !checked ? `"${labels[1]}"` : '""',
             color: '#fff',
             fontSize: 12,
             fontWeight: 600,
@@ -51,7 +50,7 @@ const CustomSwitch = MUIStyled((props) => (
     },
 }));
 
-export default function CustomToggle({ name, on_label = 'true', off_label = 'false', onChange }) {
+export default function CustomToggle({ name, labels = ['true', 'false'], onChange }) {
     const { control } = useFormContext();
     return (
         <Controller
@@ -68,8 +67,7 @@ export default function CustomToggle({ name, on_label = 'true', off_label = 'fal
                             onChange(e.target.checked);
                         }
                     }}
-                    on_label={on_label}
-                    off_label={off_label}
+                    labels={labels}
                 />
             )}
         />

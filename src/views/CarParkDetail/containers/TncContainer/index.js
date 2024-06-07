@@ -17,8 +17,7 @@ export default function TncContainer() {
                 <CustomToggle
                     name="tnc"
                     label="Customize Content"
-                    on_label="Yes"
-                    off_label="No"
+                    labels={["Yes", "No"]}
                     onChange={(e) => setCustomize(e)}
                 />
             </Row>
