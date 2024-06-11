@@ -8,8 +8,8 @@ import {
 } from "./styles";
 
 const CustomInput = forwardRef(({
-    name,
-    label,
+    name = '',
+    label = '',
     required = false,
     multiline = false,
     number = false,
@@ -23,6 +23,7 @@ const CustomInput = forwardRef(({
         <Controller
             name={name}
             control={control}
+            defaultValue={""}
             render={({ field, fieldState }) => (
                 <StyledFormControl variant="outlined" error={!!fieldState.error} width={width}>
                     <StyledInputLabel htmlFor={id} error={!!fieldState.error}>

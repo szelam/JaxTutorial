@@ -15,10 +15,12 @@ import { useFormContext } from "react-hook-form";
 import GMap from "./container/Map";
 import SyncedMapInput from "./container/SyncedMapInput";
 import { API_URL } from "../../../../constants/api";
+import { useAuth } from "../../../../providers/AuthProvider";
 
 export default function RightContainer() {
     const { register, setValue, watch, getValues } = useFormContext();
     const [districtData, setDistrictData] = useState([]);
+    const { token } = useAuth();
 
     useEffect(() => {
         getDynamicData()
@@ -30,7 +32,7 @@ export default function RightContainer() {
                 method: "GET",
                 headers: {
                     Authorization:
-                        "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjVkOTQyOGE1MjE4N2ExMWNlODFhYjQiLCJtZXJjaGFudElkIjoiNjJmMGNmNDA3OGUxZmVmY2FjYjdjOTczIiwiaWF0IjoxNzE4MDg4Mzk2fQ.btYLgJQSTpe7yGRcobPBAOTSnSmIhtx4fKYpeZd5urpg8smCBylJuInJJChSDW6eJeRf1BG79aNzSLxtYInNvTKeL1T0relJ3ORWrT-GPxz61StoKVu5lrO4dYwsNGgr_qt5CBHShSfHBj1fZuu26ewGwtKpcN5ToAGRHNPa90VHvPi7OZ0n4ZzoPfge995iC3Kr8-buOy2YYFzQze4uPUU-kUfHDPP71CB10ipqPra4T72cnwqDYuL-vM_aLhK-L1nPGiOI207GDMVZOlmAfr9cZyJXVoIE3n3QfeVf-zKLkH1h9UvusBH0tD5NOlzf6o1NIP7caswfyjWNvKpaUfbyYRJgFJe6F5QmLZUYUxQQmZ1-feMaH5ycNaJ1ktGgYbfmhAjNyBHxAm32q6puiTIPveS2RIXLn3vDriNi4Zkk1haLTcHOVRyOMRDt7Vn4EKlS3gOzh0oJ5TJQ924xRj6ieyqxL74MG9sd1R3z3eUndQXMkuZHSHBpTTbN-MS6SJbmeUikMon5KFSEd1RiGLn2y65YP-IWRf152T8MZtH81MFzM1e4h4Dm63QdChBn_SVOoIdSQWPUBkA-LXJkASoRcNQxl3OqcttRRSRpuCJ0P8S_ipXleCGT34f_Ldtar032Gx0lucq-ajMPIZRoAlOYkbj24purwjhesU00Xbs",
+                        "Bearer " + token,
                 },
             });
 
