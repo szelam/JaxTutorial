@@ -8,28 +8,28 @@ import {
 } from "../styles";
 
 export default function CustomInput({ name, label }) {
-    const { control, error } = useFormContext({ name, label });
+    const { control } = useFormContext({ name, label });
 
     return (
         <Controller
             name={name}
             control={control}
-            render={({ field }) => (
-                <StyledFormControl variant="outlined" error={!!error}>
+            render={({ field, fieldState }) => (
+                <StyledFormControl variant="outlined" error={!!fieldState?.error}>
                     <StyledInputLabel
                         htmlFor={`outlined-adornment-${name}`}
-                        error={!!error}
+                        error={!!fieldState?.error}
                     >
                         {label}
                     </StyledInputLabel>
                     <StyledOutlinedInput
                         {...field}
                         id={`outlined-adornment-${name}`}
-                        error={!!error}
+                        error={!!fieldState?.error}
                         label={label}
                     />
-                    {!!error && (
-                        <StyledFormHelperText>{error.message}</StyledFormHelperText>
+                    {!!fieldState?.error && (
+                        <StyledFormHelperText>{fieldState?.error.message}</StyledFormHelperText>
                     )}
                 </StyledFormControl>
             )}

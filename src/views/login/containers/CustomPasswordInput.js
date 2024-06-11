@@ -10,7 +10,7 @@ import {
 import { InputAdornment } from "@mui/material";
 
 export default function CustomPasswordInput() {
-    const { control, error } = useFormContext();
+    const { control } = useFormContext();
     const [showPassword, setShowPassword] = useState(false);
 
     const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -22,11 +22,11 @@ export default function CustomPasswordInput() {
         <Controller
             name="password"
             control={control}
-            render={({ field }) => (
-                <StyledFormControl variant="outlined" error={!!error}>
+            render={({ field, fieldState }) => (
+                <StyledFormControl variant="outlined" error={!!fieldState?.error}>
                     <StyledInputLabel
                         htmlFor="outlined-adornment-password"
-                        error={!!error}
+                        error={!!fieldState?.error}
                     >
                         Password
                     </StyledInputLabel>
@@ -34,7 +34,7 @@ export default function CustomPasswordInput() {
                         {...field}
                         id="outlined-adornment-password"
                         type={showPassword ? "text" : "password"}
-                        error={!!error}
+                        error={!!fieldState?.error}
                         endAdornment={
                             <InputAdornment position="end">
                                 <StyledIconButton
@@ -58,8 +58,8 @@ export default function CustomPasswordInput() {
                         }
                         label="Password"
                     />
-                    {!!error && (
-                        <StyledFormHelperText>{error.message}</StyledFormHelperText>
+                    {!!fieldState?.error && (
+                        <StyledFormHelperText>{fieldState?.error.message}</StyledFormHelperText>
                     )}
                 </StyledFormControl>
             )}

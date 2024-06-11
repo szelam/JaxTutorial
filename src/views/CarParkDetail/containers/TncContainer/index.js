@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Title } from "../../styles";
 import Row from "../Row";
 import CustomToggle from "../../../../components/CustomToggle";
@@ -7,8 +7,13 @@ import ClassicEditor from "@szelam95/ck-editor";
 import { useFormContext } from "react-hook-form";
 
 export default function TncContainer() {
-    const [customize, setCustomize] = useState(false);
-    const { watch, setValue } = useFormContext();
+    const [customize, setCustomize] = useState(true);
+    const { watch, setValue, getValues } = useFormContext();
+
+    useEffect(() => {
+        const replaceDefault = getValues("bookingTac.replaceDefault");
+        console.log(replaceDefault);
+    }, []);
 
     return (
         <>

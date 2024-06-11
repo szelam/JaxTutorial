@@ -42,6 +42,7 @@ export default function Login() {
             email: "",
             password: "",
         },
+        mode: 'all',
         resolver: yupResolver(schema),
     });
 
