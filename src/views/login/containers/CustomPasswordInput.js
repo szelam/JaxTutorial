@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Controller } from "react-hook-form";
+import { Controller, useFormContext } from "react-hook-form";
 import {
     StyledFormControl,
     StyledInputLabel,
@@ -9,7 +9,8 @@ import {
 } from "../styles";
 import { InputAdornment } from "@mui/material";
 
-export default function CustomPasswordInput({ control, error }) {
+export default function CustomPasswordInput() {
+    const { control, error } = useFormContext();
     const [showPassword, setShowPassword] = useState(false);
 
     const handleClickShowPassword = () => setShowPassword((show) => !show);

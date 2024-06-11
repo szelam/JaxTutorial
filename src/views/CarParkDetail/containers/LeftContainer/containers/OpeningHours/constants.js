@@ -1,5 +1,15 @@
 
 export const DOTW = [
+    "sun",
+    "mon",
+    "tue",
+    "wed",
+    "thu",
+    "fri",
+    "sat",
+];
+
+export const DOTWL = [
     "Sunday",
     "Monday",
     "Tuesday",
@@ -7,4 +17,4 @@ export const DOTW = [
     "Thursday",
     "Friday",
     "Saturday",
-];
+]

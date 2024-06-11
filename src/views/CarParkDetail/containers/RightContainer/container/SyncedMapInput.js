@@ -23,6 +23,6 @@ export default function SyncedMapInput({ onEnter = () => { } }) {
     });
 
     return (
-        <CustomInput ref={ref} name="addressdetails" label="" multiline />
+        <CustomInput ref={ref} name="address.details" label="" multiline />
     );
 }

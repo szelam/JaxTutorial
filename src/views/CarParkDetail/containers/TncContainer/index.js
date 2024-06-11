@@ -15,7 +15,7 @@ export default function TncContainer() {
             <Title>T&C</Title>
             <Row title="Customize Content" wide>
                 <CustomToggle
-                    name="tnc"
+                    name="bookingTac.replaceDefault"
                     label="Customize Content"
                     labels={["Yes", "No"]}
                     onChange={(e) => setCustomize(e)}
@@ -24,10 +24,10 @@ export default function TncContainer() {
             <Row title='Eng' style={{ opacity: customize ? 1 : 0.3 }} wide >
                 <CKEditor
                     editor={ClassicEditor}
-                    data={watch("tnceng")}
+                    data={watch("bookingTac.content.en")}
                     onChange={(event, editor) => {
                         const data = editor.getData();
-                        setValue("tnceng", data);
+                        setValue("bookingTac.content.en", data);
                     }}
                     disabled={customize ? false : true}
                 />
@@ -35,10 +35,10 @@ export default function TncContainer() {
             <Row title='Chi' style={{ opacity: customize ? 1 : 0.3 }} wide>
                 <CKEditor
                     editor={ClassicEditor}
-                    data={watch("tncchi")}
+                    data={watch("bookingTac.content.zh")}
                     onChange={(event, editor) => {
                         const data = editor.getData();
-                        setValue("tncchi", data);
+                        setValue("bookingTac.content.zh", data);
                     }}
                     disabled={customize ? false : true}
                 />

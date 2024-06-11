@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Checkbox, FormControlLabel, FormHelperText, FormControl } from '@mui/material';
 import { Controller, useFormContext } from 'react-hook-form';
 import { styled as MUIStyled } from '@mui/system';
@@ -23,9 +23,9 @@ const CustomFormControl = MUIStyled(FormControl)(() => ({
     position: 'relative',
 }));
 
-export default function CustomCheckboxGroup({ name, labels }) {
+export default function CustomCheckboxGroup({ name, labels = [], values = [] }) {
 
-    const { control, formState } = useFormContext();
+    const { control, formState, getValues } = useFormContext();
     const error = formState.errors[name];
 
     return (
@@ -41,12 +41,12 @@ export default function CustomCheckboxGroup({ name, labels }) {
                             <CustomCheckbox
                                 key={index}
                                 label={label}
-                                checked={value.includes(label)}
+                                checked={value.includes(values[index])}
                                 onChange={(newValue) => {
                                     if (newValue) {
-                                        onChange([...value, label]);
+                                        onChange([...value, values[index]]);
                                     } else {
-                                        onChange(value.filter((v) => v !== label));
+                                        onChange(value.filter((v) => v !== values[index]));
                                     }
                                 }}
                             />

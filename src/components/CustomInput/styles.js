@@ -24,7 +24,7 @@ export const StyledOutlinedInput = styled(OutlinedInput)`
     &.MuiInputBase-multiline {
         padding: 0;
     }
-    #outlined-addressdetails {
+    textarea:first-child {
         transition: all 300ms ease 0s;
         padding: 16.5px 14px;
     }

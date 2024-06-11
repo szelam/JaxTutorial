@@ -1,4 +1,4 @@
-import React, { forwardRef } from "react";
+import React, { forwardRef, useId } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import {
     StyledFormControl,
@@ -17,6 +17,7 @@ const CustomInput = forwardRef(({
 }, ref) => {
     const { control, formState } = useFormContext();
     const error = formState.errors[name];
+    const id = useId();
 
     return (
         <Controller
@@ -24,12 +25,12 @@ const CustomInput = forwardRef(({
             control={control}
             render={({ field, fieldState }) => (
                 <StyledFormControl variant="outlined" error={!!fieldState.error} width={width}>
-                    <StyledInputLabel htmlFor={`outlined-${name}`} error={!!fieldState.error}>
+                    <StyledInputLabel htmlFor={id} error={!!fieldState.error}>
                         {label}
                     </StyledInputLabel>
                     <StyledOutlinedInput
                         {...field}
-                        id={`outlined-${name}`}
+                        id={id}
                         type="text"
                         label={label}
                         error={!!fieldState.error}

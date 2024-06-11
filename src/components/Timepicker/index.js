@@ -8,19 +8,19 @@ import moment from "moment";
 export default function Timepicker({ name, label }) {
     const { setValue, watch } = useFormContext();
 
-    // const startTime = watch(name)?.start;
-    // const endTime = watch(name)?.end;
+    // const fromTime = watch(name)?.from;
+    // const toTime = watch(name)?.to;
 
-    // const minTime = startTime ? moment(startTime, "HH:mm") : null;
-    // const maxTime = endTime ? moment(endTime, "HH:mm") : null;
+    // const minTime = fromTime ? moment(fromTime, "HH:mm") : null;
+    // const maxTime = toTime ? moment(toTime, "HH:mm") : null;
 
     return (
         <TimepickerContainer>
             <Title>{label}</Title>
-            <CustomCheckbox label="24 hours" onChange={() => setValue(name, { start: "00:00", end: "23:59" })} />
+            <CustomCheckbox label="24 hours" onChange={() => setValue(name, { from: "00:00", to: "23:59" })} />
             <TimepickerInputsContainer>
-                <TimepickerInput name={`${name}.start`} label="From" maxTime={moment(watch(name)?.end, "HH:mm")} />
-                <TimepickerInput name={`${name}.end`} label="To" minTime={moment(watch(name)?.start, "HH:mm")} />
+                <TimepickerInput name={`${name}.from`} label="From" maxTime={moment(watch(name)?.to, "HH:mm")} />
+                <TimepickerInput name={`${name}.to`} label="To" minTime={moment(watch(name)?.from, "HH:mm")} />
             </TimepickerInputsContainer>
         </TimepickerContainer>
     )

@@ -9,11 +9,11 @@ export default function AddCarparkEmail() {
     const { control, register, getValues } = useFormContext();
     const { fields, append, prepend, remove, swap, move, insert } = useFieldArray({
         control, // control props comes from useForm (optional: if you are using FormContext)
-        name: "emails", // unique name for your Field Array
+        name: "contact.emails", // unique name for your Field Array
     });
 
     const handleAdd = () => {
-        append("");
+        append("email@domain.com");
     }
 
     const handleRemove = () => {
@@ -26,7 +26,7 @@ export default function AddCarparkEmail() {
             {fields.map((field, index) => (
                 <Row key={field.id} title={`Carpark E-mail ${index + 1}`}>
                     <CustomInput
-                        name={`emails[${index}]`}
+                        name={`contact.emails[${index}]`}
                         label=""
                     />
                     {index === 0 ? (

@@ -1,0 +1,1 @@
+export const API_URL = "https://prebook-dev.techlutionservice.com/v2";

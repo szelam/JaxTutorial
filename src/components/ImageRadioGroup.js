@@ -51,13 +51,13 @@ export default function ImageRadioGroup({ name, options }) {
             <Controller
                 name={name}
                 control={control}
-                defaultValue={options[0].label}
+                defaultValue={options[0].value}
                 render={({ field }) => (
                     <RadioGroupWrapper {...field} row>
                         {options.map((option, index) => (
                             <FormControlLabel
                                 key={index}
-                                value={option.label}
+                                value={option.value}
                                 control={
                                     <Radio
                                         disableRipple

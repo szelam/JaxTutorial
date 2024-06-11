@@ -43,6 +43,7 @@ const CustomFormControl = styled(FormControl)`
   flex-direction: row;
   gap: 10px;
   width: 100%;
+  flex-wrap: wrap;
 `;
 
 const StyledFormHelperText = MUIStyled(FormHelperText)(() => ({
@@ -52,7 +53,7 @@ const StyledFormHelperText = MUIStyled(FormHelperText)(() => ({
     color: "#FF0000",
 }));
 
-export default function ImageCheckboxGroup({ name, labels }) {
+export default function ImageCheckboxGroup({ name, options = [] }) {
 
     const { control, formState } = useFormContext();
     const error = formState.errors[name];
@@ -66,18 +67,18 @@ export default function ImageCheckboxGroup({ name, labels }) {
                 error={error}
                 render={({ field: { onChange, value } }) => (
                     <>
-                        {labels.map((label, index) => (
+                        {options.map((item, index) => (
                             <CheckboxWrapper key={index}>
                                 <FormControlLabel
                                     labelPlacement="bottom"
                                     control={
                                         <Checkbox
-                                            checked={value.includes(label[0])}
+                                            checked={value.includes(item.value)}
                                             onChange={(e) => {
                                                 if (e.target.checked) {
-                                                    onChange([...value, label[0]]);
+                                                    onChange([...value, item.value]);
                                                 } else {
-                                                    onChange(value.filter((v) => v !== label[0]));
+                                                    onChange(value.filter((v) => v !== item.value));
                                                 }
                                             }}
                                             disableRipple
@@ -88,8 +89,8 @@ export default function ImageCheckboxGroup({ name, labels }) {
                                                         backgroundColor: '#F1FFFF'
                                                     }}>
                                                     <Image
-                                                        src={label[2]}
-                                                        alt={label[0]}
+                                                        src={item.img}
+                                                        alt={item.value}
                                                     />
                                                 </ImageWrapper>
                                             }
@@ -100,14 +101,14 @@ export default function ImageCheckboxGroup({ name, labels }) {
                                                         backgroundColor: 'transparent',
                                                     }}>
                                                     <Image
-                                                        src={label[2]}
-                                                        alt={label[0]}
+                                                        alt={item.value}
+                                                        src={item.img}
                                                     />
                                                 </ImageWrapper>
                                             }
                                         />
                                     }
-                                    label={label[1]}
+                                    label={item.label}
                                 />
                             </CheckboxWrapper>
                         ))}

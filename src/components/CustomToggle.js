@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { styled as MUIStyled } from "@mui/system";
 import { Switch } from "@mui/material";
@@ -50,26 +50,30 @@ const CustomSwitch = MUIStyled(React.forwardRef((props, ref) => (
     },
 }));
 
-export default function CustomToggle({ name, labels = ['true', 'false'], onChange }) {
-    const { control } = useFormContext();
+export default function CustomToggle({ name, labels = ['true', 'false'], onChange, values = [true, false] }) {
+    const { getValues, setValue } = useFormContext();
+    const [checked, setChecked] = React.useState(false);
+
+    useEffect(() => {
+        const value = getValues(name) === values[0];
+        setChecked(value);
+    }, [getValues, name, values]);
+
+    const handleSwitch = (event) => {
+        const isChecked = event.target.checked;
+        setChecked(isChecked);
+        const value = isChecked ? values[0] : values[1];
+        setValue(name, value);
+        if (onChange) {
+            onChange(value);
+        }
+    };
+
     return (
-        <Controller
-            name={name}
-            control={control}
-            render={({ field }) => (
-                <CustomSwitch
-                    {...field}
-                    id={`switch-${name}`}
-                    checked={field.value}
-                    onChange={(e) => {
-                        field.onChange(e.target.checked);
-                        if (onChange) {
-                            onChange(e.target.checked);
-                        }
-                    }}
-                    labels={labels}
-                />
-            )}
+        <CustomSwitch
+            checked={checked}
+            onChange={handleSwitch}
+            labels={labels}
         />
     );
 }

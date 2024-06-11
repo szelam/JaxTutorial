@@ -36,7 +36,7 @@ const StyledRadio = MUIStyled(Radio)({
 const RadioWrapper = styled.div`
     padding-left: 10px;
 `;
-export default function CustomRadioGroup({ name, labels }) {
+export default function CustomRadioGroup({ name, labels, values }) {
     const { control, formState } = useFormContext();
     const error = formState.errors[name];
     return (
@@ -46,14 +46,14 @@ export default function CustomRadioGroup({ name, labels }) {
                 control={control}
                 name={name}
                 error={error}
-                defaultValue={labels[0].toLowerCase()}
+                defaultValue={values[0]}
                 render={({ field: { onChange, value } }) => (
                     <FormControl component="fieldset">
                         <RadioGroup row value={value} onChange={onChange}>
-                            {labels.map((label) => (
+                            {labels.map((label, index) => (
                                 <StyledFormControlLabel
                                     key={label}
-                                    value={label.toLowerCase()}
+                                    value={values[index]}
                                     control={<StyledRadio />}
                                     label={label}
                                 />
