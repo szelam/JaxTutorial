@@ -153,3 +153,14 @@ export const StyledFormHelperText = MUIStyled(FormHelperText)(() => ({
   bottom: "0",
   transform: "translateY(100%)",
 }));
+
+export const LoadingScreen = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 100;
+`;

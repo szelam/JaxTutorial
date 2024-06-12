@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
     Container,
@@ -13,6 +13,7 @@ import {
     LoginButton,
     Disclaimer,
     Version,
+    LoadingScreen
 } from "./styles";
 import CustomInput from "./containers/CustomInput";
 import CustomPasswordInput from "./containers/CustomPasswordInput";
@@ -21,6 +22,7 @@ import { useAuth } from "../../providers/AuthProvider";
 import { useNavigate } from 'react-router-dom';
 import { API_URL } from "../../constants/api";
 import * as Yup from "yup";
+import { CircularProgress } from "@mui/material";
 
 const schema = Yup.object().shape({
     Merchant: Yup.string().required("Merchant is required"),
@@ -46,10 +48,14 @@ export default function Login() {
         resolver: yupResolver(schema),
     });
 
+    const [isLoading, setIsLoading] = useState(false);
+
     const { login } = useAuth();
     const navigate = useNavigate();
 
     const onSubmit = async (data) => {
+        if (isLoading) return;
+        setIsLoading(true);
         try {
             console.log(JSON.stringify({ ...data, role: "admin" }));
             const response = await fetch(API_URL + "/login", {
@@ -75,42 +81,51 @@ export default function Login() {
 
         } catch (error) {
             console.error("Error:", error);
+            alert("Login failed");
+            setIsLoading(false);
         }
     };
 
     const onError = (errors, e) => console.log(errors, e);
 
     return (
-        <Container>
-            <FormProvider {...methods}>
-                <Card>
-                    <LeftPanel>
-                        <Logo src="/img/logo.png" alt="logo" />
-                    </LeftPanel>
-                    <RightPanel>
-                        <Header>
-                            <Title>Hello!</Title>
-                            <Subtitle>Good to see you here</Subtitle>
-                        </Header>
-                        <form onSubmit={methods.handleSubmit(onSubmit, onError)}>
-                            <CustomInput name="Merchant" label="Merchant" />
-                            <CustomInput name="email" label="Email" />
-                            <CustomPasswordInput />
-                            <ForgotPasswordLink>
-                                <a href="/#">Forgot Password?</a>
-                            </ForgotPasswordLink>
-                            <LoginButton type="submit" variant="contained">
-                                Log in
-                            </LoginButton>
-                        </form>
-                        <Disclaimer>
-                            By logging in, you agree to our Terms of Use and to receive email,
-                            updates and acknowledge that you read our Privacy Policy.
-                        </Disclaimer>
-                        <Version>Version: v2024031101</Version>
-                    </RightPanel>
-                </Card>
-            </FormProvider>
-        </Container>
+        <>
+            {isLoading && (
+                <LoadingScreen>
+                    <CircularProgress />
+                </LoadingScreen>
+            )}
+            <Container>
+                <FormProvider {...methods}>
+                    <Card>
+                        <LeftPanel>
+                            <Logo src="/img/logo.png" alt="logo" />
+                        </LeftPanel>
+                        <RightPanel>
+                            <Header>
+                                <Title>Hello!</Title>
+                                <Subtitle>Good to see you here</Subtitle>
+                            </Header>
+                            <form onSubmit={methods.handleSubmit(onSubmit, onError)}>
+                                <CustomInput name="Merchant" label="Merchant" />
+                                <CustomInput name="email" label="Email" />
+                                <CustomPasswordInput />
+                                <ForgotPasswordLink>
+                                    <a href="/#">Forgot Password?</a>
+                                </ForgotPasswordLink>
+                                <LoginButton type="submit" variant="contained">
+                                    Log in
+                                </LoginButton>
+                            </form>
+                            <Disclaimer>
+                                By logging in, you agree to our Terms of Use and to receive email,
+                                updates and acknowledge that you read our Privacy Policy.
+                            </Disclaimer>
+                            <Version>Version: v2024031101</Version>
+                        </RightPanel>
+                    </Card>
+                </FormProvider>
+            </Container>
+        </>
     );
 }

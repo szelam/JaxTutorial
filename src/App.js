@@ -1,6 +1,7 @@
 import "./App.css";
 import CarParkDetail from "./views/CarParkDetail";
 import Login from "./views/login";
+import Availability from "./views/Availability";
 import {
   createBrowserRouter,
   RouterProvider,
@@ -15,6 +16,10 @@ const router = createBrowserRouter([
   {
     path: "/cpd",
     element: <CarParkDetail />,
+  },
+  {
+    path: "/ava",
+    element: <Availability />,
   },
   {
     path: "*",
