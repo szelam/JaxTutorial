@@ -14,10 +14,9 @@ const StyledIconButton = MUIStyled(IconButton)({
         backgroundColor: '#21BFBC',
     }
 });
-
-export default function CustomIconButton({ onClick, children }) {
+export default function CustomIconButton({ onClick, children, className, style = {} }) {
     return (
-        <StyledIconButton onClick={onClick} disableRipple>
+        <StyledIconButton onClick={onClick} disableRipple style={style}>
             {children}
         </StyledIconButton>
     )
