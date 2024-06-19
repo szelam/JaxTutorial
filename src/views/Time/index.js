@@ -1,9 +1,17 @@
+import DaySelector from "./containers/Dayselector";
+import TimeSelector from "./containers/TimeSelector";
+import TitleBar from "./containers/Title";
 import { Container } from "./styles";
+import TimeViewModel from "./viewModel";
 
-export default function Time() {
+function Time() {
   return (
     <Container>
-      <h1>Time</h1>
+      <TitleBar />
+      <DaySelector />
+      <TimeSelector />
     </Container>
   );
 }
+
+export default TimeViewModel.withProvider(Time);
