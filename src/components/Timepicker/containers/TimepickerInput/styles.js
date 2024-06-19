@@ -1,7 +1,8 @@
 import { TimePicker } from "@mui/x-date-pickers";
 import { styled as MUIStyled } from "@mui/system";
 
-export const StyledTimePicker = MUIStyled(TimePicker)(({ theme }) => ({
+export const StyledTimePicker = MUIStyled(TimePicker)(({ theme, style }) => ({
+    ...style,
     '& .MuiOutlinedInput-root': {
         borderRadius: '15px',
         '& .MuiOutlinedInput-notchedOutline': {

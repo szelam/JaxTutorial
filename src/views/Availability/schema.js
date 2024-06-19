@@ -140,113 +140,134 @@ const schema = yup.object().shape({
         })
     ),
     HourlyPolicies: yup.array().of(
-        yup
-            .object()
-            .shape({
-                from: yup
-                    .string()
-                    .required("required")
-                    .test(
-                        "HourlyPolicies",
-                        "From should before To",
-                        (date, { createError, path, parent }) => {
-                            const { to, deleted } = parent;
+        yup.object().shape({
+            from: yup
+                .string()
+                .required("required")
+                .test(
+                    "from-before-to",
+                    "From should be before To",
+                    (date, { createError, path, parent }) => {
+                        const { to, deleted } = parent;
 
-                            if (deleted) {
-                                return true;
-                            }
-
-                            if (!date) {
-                                return createError({
-                                    path,
-                                    message: "required",
-                                });
-                            }
-                            const time = moment(date, "HH:mm");
-
-                            if (!time.isValid()) {
-                                return createError({
-                                    path,
-                                    message: "InValid Date",
-                                });
-                            }
-
-                            if (time.isValid() && time.minutes() % 15 !== 0) {
-                                return createError({
-                                    path,
-                                    message: "only allow 15 30 45 60 minutes",
-                                });
-                            }
-
-                            return time.isBefore(moment(to, "HH:mm"), "minute");
-                        }
-                    )
-                    .typeError("required"),
-                to: yup
-                    .string()
-                    .required("required")
-                    .test(
-                        "HourlyPolicies",
-                        "To should be after From",
-                        (date, { createError, path, parent }) => {
-                            const { from, deleted } = parent;
-                            if (!date) {
-                                return createError({
-                                    path,
-                                    message: "required",
-                                });
-                            }
-
-                            if (deleted) {
-                                return true;
-                            }
-
-                            const time = moment(date, "HH:mm");
-
-                            if (time.isValid() && time.format("HH:mm") === "23:59") {
-                                return true;
-                            }
-
-                            if (time.isValid() && time.minutes() % 15 !== 0) {
-                                return createError({
-                                    path,
-                                    message: "only allow 15 30 45 60 minutes",
-                                });
-                            }
-
-                            return time.isAfter(moment(from, "HH:mm"), "minutes");
-                        }
-                    )
-                    .typeError("required"),
-                max: yup
-                    .string()
-                    .nullable(true)
-                    .test("Invalid hour", "Invalid hour", (max, schema) => {
-                        const { parent = {}, path, createError } = schema;
-                        const { min } = parent || {};
-                        if (max === "NaN" || !max) {
+                        if (deleted) {
                             return true;
                         }
 
-                        if (max < min) {
+                        if (!date) {
                             return createError({
                                 path,
-                                message: "max hour should be larger than min hour",
+                                message: "required",
+                            });
+                        }
+                        const time = moment(date, "HH:mm");
+
+                        if (!time.isValid()) {
+                            return createError({
+                                path,
+                                message: "Invalid Date",
                             });
                         }
 
-                        return Number.isInteger(max / 0.25) && max > 0;
-                    }),
-                min: yup
-                    .number()
-                    .required("required")
-                    .moreThan(0, "must be a positive number")
-                    .test("Invalid hour", "Invalid hour", (hour) =>
-                        Number.isInteger(hour / 0.25)
-                    ),
-                weekday: yup.number().required("required"),
-            })
-            .required("required"),
+                        if (time.isValid() && time.minutes() % 15 !== 0) {
+                            return createError({
+                                path,
+                                message: "only allow 15, 30, 45, 60 minutes",
+                            });
+                        }
+
+                        return time.isBefore(moment(to, "HH:mm"), "minute");
+                    }
+                )
+                .typeError("required"),
+            to: yup
+                .string()
+                .required("required")
+                .test(
+                    "to-after-from",
+                    "To should be after From",
+                    (date, { createError, path, parent }) => {
+                        const { from, deleted } = parent;
+                        if (!date) {
+                            return createError({
+                                path,
+                                message: "required",
+                            });
+                        }
+
+                        if (deleted) {
+                            return true;
+                        }
+
+                        const time = moment(date, "HH:mm");
+
+                        if (time.isValid() && time.format("HH:mm") === "23:59") {
+                            return true;
+                        }
+
+                        if (time.isValid() && time.minutes() % 15 !== 0) {
+                            return createError({
+                                path,
+                                message: "only allow 15, 30, 45, 60 minutes",
+                            });
+                        }
+
+                        return time.isAfter(moment(from, "HH:mm"), "minutes");
+                    }
+                )
+                .typeError("required"),
+            max: yup
+                .number()
+                .nullable(true)
+                .test("non-zero-max", "Max cannot be 0", (max) => max !== 0)
+                .test("max-greater-than-min", "Max must be greater than Min", function (max) {
+                    const { min } = this.parent;
+                    return max === null || max > min;
+                })
+                .test("max-within-range", "Max must be within the range between From and To", function (max) {
+                    const { from, to } = this.parent;
+                    if (max === null) return true;
+
+                    const fromTime = moment(from, "HH:mm");
+                    const toTime = moment(to, "HH:mm");
+                    const maxDuration = toTime.diff(fromTime, "hours", true);
+
+                    return max <= maxDuration;
+                }),
+            min: yup
+                .number()
+                .required("required")
+                .moreThan(0, "must be a positive number")
+                .test("valid-min", "Min must be within the range between From and To", function (min) {
+                    const { from, to } = this.parent;
+
+                    const fromTime = moment(from, "HH:mm");
+                    const toTime = moment(to, "HH:mm");
+                    const minDuration = toTime.diff(fromTime, "hours", true);
+
+                    return min < minDuration;
+                })
+                .test("valid-increment", "Invalid hour", (hour) => Number.isInteger(hour / 0.25)),
+            weekday: yup
+                .number()
+                .required("required")
+                .test("no-overlap", "Time slots must not overlap", function (value) {
+                    const { from, to } = this.parent;
+                    const others = this.options.context.HourlyPolicies || [];
+                    const fromTime = moment(from, "HH:mm");
+                    const toTime = moment(to, "HH:mm");
+
+                    return !others.some((policy) => {
+                        if (policy.weekday !== value || policy === this.parent) return false;
+
+                        const otherFromTime = moment(policy.from, "HH:mm");
+                        const otherToTime = moment(policy.to, "HH:mm");
+
+                        return (fromTime.isBefore(otherToTime) && toTime.isAfter(otherFromTime));
+                    });
+                }),
+        })
+            .required("required")
     ),
 });
 

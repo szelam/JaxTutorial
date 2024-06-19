@@ -14,6 +14,7 @@ const CustomInput = forwardRef(({
     multiline = false,
     number = false,
     width = "100%",
+    style = {},
 }, ref) => {
     const { control, formState } = useFormContext();
     const error = formState.errors[name];
@@ -25,7 +26,7 @@ const CustomInput = forwardRef(({
             control={control}
             defaultValue={""}
             render={({ field, fieldState }) => (
-                <StyledFormControl variant="outlined" error={!!fieldState.error} width={width}>
+                <StyledFormControl variant="outlined" error={!!fieldState.error} width={width} style={style}>
                     <StyledInputLabel htmlFor={id} error={!!fieldState.error}>
                         {label}
                     </StyledInputLabel>

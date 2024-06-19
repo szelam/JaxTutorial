@@ -23,11 +23,11 @@ export default function Availability() {
                 to: moment().add(1, 'day'),
             }],
             HourlyPolicies: [{
-                from: moment(),
-                to: moment().add(1, 'hour'),
+                from: "00:00",
+                to: "23:59",
                 min: 1,
                 max: 1,
-                weekday: 1,
+                weekday: 0
             }]
         }),
     });

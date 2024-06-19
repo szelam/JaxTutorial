@@ -8,16 +8,6 @@ export const DayChooserRow = styled.div`
   display: flex;
 `;
 
-export const DayChooser = styled.button`
-      margin: 10px 10px 5px;
-    background-color: rgb(242, 255, 255);
-    padding: 10px;
-    border-radius: 10px;
-    color: rgb(186, 234, 233);
-    border: 3px solid rgb(186, 234, 233);
-    transition: all 300ms ease-in-out 0s;
-`
-
 export const ResetButton = styled.button`
   color: rgb(33, 191, 188);
     align-self: flex-end;

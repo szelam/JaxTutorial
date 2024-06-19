@@ -1,12 +1,10 @@
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./App.css";
+import { AuthProvider } from "./providers/AuthProvider";
+import Availability from "./views/Availability";
 import CarParkDetail from "./views/CarParkDetail";
 import Login from "./views/login";
-import Availability from "./views/Availability";
-import {
-  createBrowserRouter,
-  RouterProvider,
-} from "react-router-dom";
-import { AuthProvider } from "./providers/AuthProvider";
+import Time from "./views/Time";
 
 const router = createBrowserRouter([
   {
@@ -20,6 +18,10 @@ const router = createBrowserRouter([
   {
     path: "/ava",
     element: <Availability />,
+  },
+  {
+    path: "/time",
+    element: <Time />,
   },
   {
     path: "*",

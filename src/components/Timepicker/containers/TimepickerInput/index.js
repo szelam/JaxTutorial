@@ -1,14 +1,14 @@
 import React from "react";
 import { StyledTimePicker } from "./styles";
-import { TimePicker } from "@mui/x-date-pickers";
 import { useFormContext } from 'react-hook-form';
 import moment from 'moment';
 
-export default function TimepickerInput({ name = "", label = "", minTime = moment('00:00', 'HH:mm'), maxTime = moment('23:59', 'HH:mm') }) {
+export default function TimepickerInput({ name = "", label = "", minTime = moment('00:00', 'HH:mm'), maxTime = moment('23:59', 'HH:mm'), style = {} }) {
     const { register, setValue, watch } = useFormContext();
 
     return (
         <StyledTimePicker
+            style={style}
             ampm={false}
             minTime={minTime}
             maxTime={maxTime}
