@@ -1,6 +1,36 @@
 const { isEqual } = require("lodash");
+function case3(originalQuery, filterObject, defaultQuery) {
+  var query = filterObject;
+  for (const key in query) {
+    const value = query[key];
+    if (
+      value === null ||
+      value === undefined ||
+      value === "" ||
+      (Array.isArray(value) && value.length === 0) ||
+      (typeof value === "object" &&
+        Object.values(value).every(
+          (v) =>
+            v === undefined ||
+            v === null ||
+            v === "" ||
+            (Array.isArray(v) && v.length === 0)
+        )) ||
+      (typeof value === "function" && value.toString() === "() => {}")
+    ) {
+      delete query[key];
+    }
+  }
 
-function case3(originalQuery, filterObject, defaultQuery) {}
+  for (const key in defaultQuery) {
+    if (query[key] === undefined) {
+      query[key] = defaultQuery[key];
+    }
+  }
+
+  console.log(query);
+  return query;
+}
 
 test(`case 3 checking`, () => {
   const originalQuery = {
