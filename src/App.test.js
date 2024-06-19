@@ -1,48 +1,30 @@
-// import { render, screen } from '@testing-library/react';
-// import App from './App';
+const { isEqual } = require("lodash");
 
-// test('renders learn react link', () => {
-//   render(<App />);
-//   const linkElement = screen.getByText(/learn react/i);
-//   expect(linkElement).toBeInTheDocument();
-// });
+function case2(originalQuery, filterObject, defaultQuery) {}
 
-// import { render, screen } from '@testing-library/react';
-// import App from './App';
-
-const { cloneDeep, isEqual } = require("lodash");
-
-// test('renders learn react link', () => {
-//   render(<App />);
-//   const linkElement = screen.getByText(/learn react/i);
-//   expect(linkElement).toBeInTheDocument();
-// });
-
-function case1(originalQuery, filterObject, defaultQuery) {}
-
-test("Case 1 checking", () => {
+test(`case 2 checking`, () => {
   const originalQuery = {
     name: "Paul",
-    age: 20,
     "phone.number": "99999999",
-    constructionSiteIds: ["123"],
+    age: 24,
+    constructionSiteIds: ["123", "456"],
   };
   const filterObject = {
     name: "Leo",
-    age: 24,
-    "phone.number": "99999999",
+    user: { profiles: [] },
+    setter: () => {},
+    age: null,
+    constructionSiteIds: [],
   };
   const defaultQuery = {
     _limit: 20,
     _populate: ["name", "age"],
     _page: 1,
   };
-  const result = case1(originalQuery, filterObject, defaultQuery);
+  const result = case2(originalQuery, filterObject, defaultQuery);
   expect(
     isEqual(result, {
-      age: 24,
-      name: "Leo",
-      "phone.number": "99999999",
+      name: "Paul",
       _limit: 20,
       _page: 1,
       _populate: ["name", "age"],
