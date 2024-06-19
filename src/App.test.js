@@ -18,7 +18,16 @@ const { cloneDeep, isEqual } = require("lodash");
 //   expect(linkElement).toBeInTheDocument();
 // });
 
-function case1(originalQuery, filterObject, defaultQuery) {}
+function case1(originalQuery, filterObject, defaultQuery) {
+  const query = cloneDeep(filterObject);
+  for (const key in defaultQuery) {
+    if (query[key] === undefined) {
+      query[key] = defaultQuery[key];
+    }
+  }
+  console.log(query);
+  return query;
+}
 
 test("Case 1 checking", () => {
   const originalQuery = {
