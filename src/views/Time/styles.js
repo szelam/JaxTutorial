@@ -140,18 +140,44 @@ export const AMPMButton = styled.div`
 export const TimeItemsContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(10, 1fr);
-  grid-gap: 8px;
-  row-gap: 8px;
+  /* grid-gap: 8px; */
+  /* row-gap: 8px; */
   margin: 16px;
   box-sizing: border-box;
 `;
 
 export const TimeItem = styled.button`
-  background-color: white;
   border: 2px solid ${({ theme }) => theme.palette.primary.main};
-  color: black;
   padding: 8px 0px;
-  border-radius: 1000px;
+  margin: ${({ selected }) => {
+    switch (selected) {
+      case "start":
+        return "4px 0 4px 4px";
+      case "startLonely":
+        return "4px 0 4px 4px";
+      case "end":
+        return "4px 4px 4px 0";
+      case "both":
+        return "4px 0 4px 0";
+      default:
+        return "4px";
+    }
+  }};
+  border-radius: ${({ selected }) => {
+    switch (selected) {
+      case "start":
+        return "1000px 0 0 1000px";
+      case "end":
+        return "0 1000px 1000px 0";
+      case "both":
+        return "0";
+      default:
+        return "1000px";
+    }
+  }};
+  background-color: ${({ theme, selected }) =>
+    selected === "no" ? "white" : theme.palette.primary.main};
+  color: ${({ theme, selected }) => (selected === "no" ? "black" : "white")};
   cursor: pointer;
   min-width: 9%;
 `;

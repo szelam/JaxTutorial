@@ -5,8 +5,11 @@ function useTime() {
   const [dayItem, setDayItem] = useState(getDayItem());
   const [timeItem, setTimeItem] = useState(getTimeItem());
   const [dates, setDates] = useState(getDates());
-  const [viewMonth, setViewMonth] = useState(dates.months[1]);
-  const [day, setDay] = useState(getDates().today);
+  const [viewMonth, setViewMonth] = useState(dates.months.textList[1]);
+  const [day, setDay] = useState({
+    date: dates.today,
+    month: dates.months.list[1],
+  });
   const [time, setTime] = useState({
     AM: { from: null, to: null },
     PM: { from: null, to: null },
@@ -44,6 +47,7 @@ function useTime() {
       d.setDate(d.getDate() + 1)
     ) {
       const day = d.getDate();
+      const month = d.getMonth();
       const dotw = getDotw(d);
 
       // Determine the status
@@ -55,71 +59,60 @@ function useTime() {
         type = "active";
       }
 
-      result.push({ day, dotw, type });
+      result.push({ day, month, dotw, type });
     }
 
     return result;
   }
 
   function getTimeItem() {
-    const generateTimeSlots = (isPM) => {
-      const times = [];
-      for (let hour = 0; hour < 12; hour++) {
-        for (let minute = 0; minute < 60; minute += 15) {
-          const formattedHour = hour === 0 ? 12 : hour;
-          const formattedMinute = minute < 10 ? `0${minute}` : minute;
-          times.push(`${formattedHour}:${formattedMinute}`);
-        }
+    const times = [];
+    for (let hour = 0; hour < 12; hour++) {
+      for (let minute = 0; minute < 60; minute += 15) {
+        const formattedHour = hour;
+        const formattedMinute = minute < 10 ? `0${minute}` : minute;
+        times.push(`${formattedHour}:${formattedMinute}`);
       }
-      if (isPM) {
-        return times.map((time) =>
-          time
-            .replace(/^12/, "12")
-            .replace(/^(\d{1,2})/, (match) =>
-              (parseInt(match, 10) + 12).toString()
-            )
-        );
-      }
-      return times;
-    };
-
-    return {
-      AM: generateTimeSlots(false),
-      PM: generateTimeSlots(true),
-    };
+    }
+    return times;
   }
 
   function getDates() {
     const today = new Date();
     const todayDate = today.getDate();
-    const month = today.toLocaleString("default", { month: "short" });
-    const lastMonth = new Date(
-      today.getFullYear(),
+    const months = [
       today.getMonth() - 1,
-      1
-    ).toLocaleString("default", { month: "short" });
-    const nextMonth = new Date(
-      today.getFullYear(),
+      today.getMonth(),
       today.getMonth() + 1,
-      1
-    ).toLocaleString("default", { month: "short" });
+    ];
+    const monthsObj = {
+      list: months,
+      textList: months.map((month) => {
+        const date = new Date(today.getFullYear(), month, 1);
+        return date.toLocaleString("default", { month: "short" });
+      }, []),
+    };
     const year = today.getFullYear();
-    return { today: todayDate, months: [lastMonth, month, nextMonth], year };
+
+    return { today: todayDate, months: monthsObj, year: year };
   }
 
   function scrollToToday() {
-    const { scrollContainer, breakpoint1 } = getScrollContainer();
-    scrollContainer.scrollLeft = breakpoint1 + 8 + (59 + 16) * (day - 1);
+    const { scrollContainer, breakpoints } = getScrollContainer();
+    const breakpoint =
+      day.month + 1 - dates.months.list[dates.months.list.length - 1];
+    scrollContainer.scrollLeft =
+      breakpoints[breakpoint] + 8 + (59 + 16) * (day.date - 1);
   }
 
-  function handleScroll(scrollContainer, breakpoint1, breakpoint2) {
+  function handleScroll(scrollContainer, breakpoints) {
     const scrollLeft = scrollContainer.scrollLeft;
-    if (scrollLeft < breakpoint1) {
-      setViewMonth(dates.months[0]);
-    } else if (scrollLeft < breakpoint2) {
-      setViewMonth(dates.months[1]);
+    if (scrollLeft < breakpoints[0]) {
+      setViewMonth(dates.months.textList[0]);
+    } else if (scrollLeft < breakpoints[1]) {
+      setViewMonth(dates.months.textList[1]);
     } else {
-      setViewMonth(dates.months[2]);
+      setViewMonth(dates.months.textList[2]);
     }
   }
 
@@ -128,7 +121,10 @@ function useTime() {
   }
 
   function handleClear() {
-    console.log("clear");
+    setTime({
+      AM: { from: null, to: null },
+      PM: { from: null, to: null },
+    });
   }
 
   function handleSelectDay(type) {
@@ -144,15 +140,58 @@ function useTime() {
     console.log("Total content width:", totalWidth);
     const breakpoint1 = totalWidth / 3;
     const breakpoint2 = (totalWidth / 3) * 2;
-    return { scrollContainer, breakpoint1, breakpoint2 };
+    return { scrollContainer, breakpoints: [breakpoint1, breakpoint2] };
+  }
+
+  function handleSelectTime(item, ap) {
+    const newTime = { ...time };
+    const newTimeAP = newTime[ap];
+    if (!newTimeAP.from && !newTimeAP.to) {
+      newTimeAP.from = item;
+    } else if (newTimeAP.from && !newTimeAP.to) {
+      if (
+        Number(newTimeAP.from.replace(":", "")) < Number(item.replace(":", ""))
+      ) {
+        newTimeAP.to = item;
+      } else {
+        newTimeAP.to = newTimeAP.from;
+        newTimeAP.from = item;
+      }
+    } else {
+      newTimeAP.from = item;
+      newTimeAP.to = null;
+    }
+    setTime(newTime);
+  }
+
+  function compareTime(time, item) {
+    if (!time.from && !time.to) {
+      return "no";
+    }
+    if (time.from === item && time.to === null) {
+      return "startLonely";
+    } else if (time.from === item && time.to !== null) {
+      return "start";
+    } else if (time.to === item) {
+      return "end";
+    }
+    if (time.from && time.to) {
+      const nTimeFrom = Number(time.from.replace(":", ""));
+      const nTimeTo = Number(time.to.replace(":", ""));
+      const nItem = Number(item.replace(":", ""));
+      if (nItem > nTimeFrom && nItem < nTimeTo) {
+        return "both";
+      }
+    }
+    return "no";
   }
 
   useEffect(() => {
     scrollToToday();
-    const { scrollContainer, breakpoint1, breakpoint2 } = getScrollContainer();
+    const { scrollContainer, breakpoints } = getScrollContainer();
 
     scrollContainer.addEventListener("scroll", () =>
-      handleScroll(scrollContainer, breakpoint1, breakpoint2)
+      handleScroll(scrollContainer, breakpoints)
     );
 
     return () => {
@@ -164,6 +203,8 @@ function useTime() {
     handleToToday,
     handleClear,
     handleSelectDay,
+    handleSelectTime,
+    compareTime,
     dayItem,
     timeItem,
     dates,

@@ -27,7 +27,11 @@ export default function DaySelector() {
         {dayItem.map((item, index) => (
           <DayItem
             key={index}
-            type={item.day === day ? "selected" : item.type}
+            type={
+              item.day === day.date && item.month === day.month
+                ? "selected"
+                : item.type
+            }
             onClick={() => {
               handleSelectDay(item.type);
             }}
