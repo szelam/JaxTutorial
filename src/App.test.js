@@ -1,7 +1,7 @@
 const { isEqual } = require("lodash");
 function case3(originalQuery, filterObject, defaultQuery) {
   var query = filterObject;
-  for (const key in query) {
+  Object.keys(query).forEach((key) => {
     const value = query[key];
     if (
       value === null ||
@@ -20,7 +20,7 @@ function case3(originalQuery, filterObject, defaultQuery) {
     ) {
       delete query[key];
     }
-  }
+  });
 
   for (const key in defaultQuery) {
     if (query[key] === undefined) {
