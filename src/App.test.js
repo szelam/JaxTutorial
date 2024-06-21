@@ -1,5 +1,5 @@
 const { isEqual } = require("lodash");
-function case4(originalQuery, filterObject, defaultQuery) {
+function case5(filterObject, defaultQuery) {
   var query = filterObject;
   Object.keys(query).forEach((key) => {
     const value = query[key];
@@ -32,21 +32,14 @@ function case4(originalQuery, filterObject, defaultQuery) {
   return query;
 }
 
-test(`case 4 checking`, () => {
-  const originalQuery = {
-    name: "Paul",
-  };
-  const filterObject = {
-    setter: () => {
-      console.log("asd");
-    },
-  };
+test(`case 5 checking`, () => {
+  const filterObject = null;
   const defaultQuery = {
     _limit: 20,
-    _populate: ["name", "age"],
     _page: 1,
+    _populate: ["name", "age"],
   };
-  const result = case4(originalQuery, filterObject, defaultQuery);
+  const result = case5(filterObject, defaultQuery);
   expect(
     isEqual(result, {
       _limit: 20,
