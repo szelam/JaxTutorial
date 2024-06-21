@@ -1,7 +1,7 @@
 const { isEqual } = require("lodash");
-function case5(filterObject, defaultQuery) {}
+function case6(filterObject, defaultQuery) {}
 
-test(`case 5 checking`, () => {
+test(`case 6 checking`, () => {
   const filterObject = {
     phone: {
       setter: () => {
@@ -21,7 +21,7 @@ test(`case 5 checking`, () => {
     _page: 1,
     _populate: ["name", "age"],
   };
-  const result = case5(filterObject, defaultQuery);
+  const result = case6(filterObject, defaultQuery);
   expect(
     isEqual(result, {
       _limit: 20,
