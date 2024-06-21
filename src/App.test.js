@@ -19,16 +19,9 @@ function case6(filterObject, defaultQuery) {
       value === undefined ||
       value === "" ||
       (Array.isArray(value) && value.length === 0) ||
-      (typeof value === "object" &&
-        Object.values(value).every(
-          (v) =>
-            v === undefined ||
-            v === null ||
-            v === "" ||
-            (Array.isArray(v) && v.length === 0)
-        )) ||
-      (typeof value === "function" && value.toString() === "() => {}") ||
-      (typeof value === "function" && isOnlyConsoleLog(value))
+      typeof value === "object" ||
+      typeof value == "function" ||
+      React.isValidElement(value)
     ) {
       delete query[key];
     }
