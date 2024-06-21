@@ -1,5 +1,14 @@
 const { isEqual } = require("lodash");
 function case4(originalQuery, filterObject, defaultQuery) {
+  function isOnlyConsoleLog(func) {
+    const funcStr = func.toString();
+    const bodyMatch = funcStr.match(/{([\s\S]*)}/);
+    const body = bodyMatch[1].trim();
+    const consoleLogPattern = /^console\.log\(.*\);\s*$/;
+    const lines = body.split("\n").map((line) => line.trim());
+    return lines.every((line) => consoleLogPattern.test(line));
+  }
+
   var query = filterObject;
   Object.keys(query).forEach((key) => {
     const value = query[key];
@@ -16,7 +25,8 @@ function case4(originalQuery, filterObject, defaultQuery) {
             v === "" ||
             (Array.isArray(v) && v.length === 0)
         )) ||
-      (typeof value === "function" && value.toString() === "() => {}")
+      (typeof value === "function" && value.toString() === "() => {}") ||
+      (typeof value === "function" && isOnlyConsoleLog(value))
     ) {
       delete query[key];
     }
