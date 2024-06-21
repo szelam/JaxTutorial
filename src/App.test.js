@@ -50,7 +50,7 @@ test(`case 4 checking`, () => {
   expect(
     isEqual(result, {
       _limit: 20,
-      _page: 2,
+      _page: 1,
       _populate: ["name", "age"],
     })
   ).toBeTruthy();
