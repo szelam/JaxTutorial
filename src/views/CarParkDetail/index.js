@@ -1,4 +1,12 @@
-import React, { useEffect, useContext } from "react";
+import { yupResolver } from "@hookform/resolvers/yup";
+import React, { useEffect } from "react";
+import { FormProvider, useForm } from "react-hook-form";
+import { API_URL } from "../../constants/api";
+import { useAuth } from "../../providers/AuthProvider";
+import LeftContainer from "./containers/LeftContainer";
+import RightContainer from "./containers/RightContainer";
+import TncContainer from "./containers/TncContainer";
+import schema from "./schema";
 import {
   ActionRow,
   Container,
@@ -6,15 +14,6 @@ import {
   CustomSecondaryButton,
   SwitchContainer,
 } from "./styles";
-import { FormProvider, useForm } from "react-hook-form";
-import RightContainer from "./containers/RightContainer";
-import LeftContainer from "./containers/LeftContainer";
-import TncContainer from "./containers/TncContainer";
-import schema from "./schema";
-import { useAuth } from "../../providers/AuthProvider";
-import { Navigate } from "react-router-dom";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { API_URL } from "../../constants/api";
 
 const CARPARK_ID = "661f8ed773794299a25a1717";
 
@@ -26,16 +25,8 @@ export default function CarParkDetail() {
   });
 
   useEffect(() => {
-    if (!token) {
-      alert("You are not authenticated. Redirecting to login page."); // This is ran twice because of Strict Mode in development.
-    } else {
-      getCarParkDetail();
-    }
-  }, [token]);
-
-  if (!token) {
-    return <Navigate to="/" replace />;
-  }
+    getCarParkDetail();
+  }, []);
 
   const getCarParkDetail = async () => {
     try {
