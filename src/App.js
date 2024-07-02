@@ -4,11 +4,16 @@ import PrivateRoute from "./components/PrivateRoute.jsx";
 import { AuthProvider } from "./providers/AuthProvider";
 import CarParkDetail from "./views/CarParkDetail";
 import Login from "./views/login";
+import Test from "./views/Test";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Login />,
+  },
+  {
+    path: "/test",
+    element: <Test />,
   },
   {
     path: "/cpd",

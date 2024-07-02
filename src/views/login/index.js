@@ -71,8 +71,7 @@ export default function Login() {
         },
       });
       const userData = await userDataResponse.json();
-      console.log(result.data);
-      login(result.data.token);
+      login(result.data.token, userData.data.Merchant);
       navigate("/cpd");
     } catch (error) {
       if (error.message === "Unauthorized") {

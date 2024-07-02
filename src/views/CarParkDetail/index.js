@@ -15,10 +15,10 @@ import {
   SwitchContainer,
 } from "./styles";
 
-const CARPARK_ID = "661f8ed773794299a25a1717";
+const CARPARK_ID = "62f2106a1aa3d91e23a191a8";
 
 export default function CarParkDetail() {
-  const { token, setCarParkId } = useAuth();
+  const { token, setCarParkId, merchantID } = useAuth();
   const methods = useForm({
     resolver: yupResolver(schema),
     defaultValues: schema.cast(),
@@ -30,12 +30,15 @@ export default function CarParkDetail() {
 
   const getCarParkDetail = async () => {
     try {
-      const carparkdetail = await fetch(API_URL + `/carpark/${CARPARK_ID}`, {
-        method: "GET",
-        headers: {
-          Authorization: "Bearer " + token,
-        },
-      });
+      const carparkdetail = await fetch(
+        API_URL + `/carpark/${CARPARK_ID}` + "?Merchant=" + merchantID,
+        {
+          method: "GET",
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        }
+      );
 
       const carparkdetailData = await carparkdetail.json();
 
