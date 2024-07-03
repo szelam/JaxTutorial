@@ -25,8 +25,9 @@ export default function CarParkDetail() {
   });
 
   useEffect(() => {
-    getCarParkDetail();
-  }, []);
+    console.log(merchantID);
+    if (merchantID) getCarParkDetail();
+  }, [merchantID]);
 
   const getCarParkDetail = async () => {
     try {

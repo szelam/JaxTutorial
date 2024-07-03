@@ -10,15 +10,13 @@ const StyledInput = styled.input`
   width: 100%;
   padding: 12px;
   font-size: 16px;
-  border: 2px solid
-    ${(props) =>
-      props.danger ? "#d32f2f" : props.focused ? "#1976d2" : "#ccc"};
+  border: 2px solid ${(props) => props.borderColor};
   border-radius: 4px;
   outline: none;
   transition: all 0.3s;
 
   &:focus {
-    border-color: #1976d2;
+    border-color: ${(props) => props.focusBorderColor};
   }
 
   &::placeholder {
@@ -28,8 +26,7 @@ const StyledInput = styled.input`
   &:not(:placeholder-shown) + label,
   &:focus + label {
     transform: translateY(-20px) scale(0.75);
-    color: ${(props) =>
-      props.danger ? "#d32f2f" : props.focused ? "#1976d2" : "#ccc"};
+    color: ${(props) => props.labelColor};
     background-color: white;
     padding: 0 4px;
   }
@@ -40,7 +37,7 @@ const StyledLabel = styled.label`
   left: 12px;
   top: 12px;
   font-size: 16px;
-  color: ${(props) => (props.danger ? "#d32f2f" : "#ccc")};
+  color: ${(props) => props.color};
   pointer-events: none;
   transition: all 0.3s;
   transform-origin: top left;
@@ -49,17 +46,36 @@ const StyledLabel = styled.label`
 const MaterialInput = ({ label, placeholder, danger, ...props }) => {
   const [focused, setFocused] = useState(false);
 
+  const DANGER_COLOR = "#d32f2f";
+  const FOCUS_COLOR = "#1976d2";
+  const DEFAULT_COLOR = "#ccc";
+
+  const getBorderColor = () => {
+    if (danger) return DANGER_COLOR;
+    if (focused) return FOCUS_COLOR;
+    return DEFAULT_COLOR;
+  };
+
+  const getLabelColor = () => {
+    if (danger) return DANGER_COLOR;
+    if (focused) return FOCUS_COLOR;
+    return DEFAULT_COLOR;
+  };
+
   return (
     <InputWrapper>
       <StyledInput
         placeholder={placeholder}
-        danger={danger}
-        focused={focused}
+        borderColor={getBorderColor()}
+        focusBorderColor={FOCUS_COLOR}
+        labelColor={getLabelColor()}
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
         {...props}
       />
-      <StyledLabel danger={danger}>{label}</StyledLabel>
+      <StyledLabel color={danger ? DANGER_COLOR : DEFAULT_COLOR}>
+        {label}
+      </StyledLabel>
     </InputWrapper>
   );
 };

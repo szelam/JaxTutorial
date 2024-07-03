@@ -46,7 +46,7 @@ export default function Login() {
     resolver: yupResolver(schema),
   });
 
-  const { login } = useAuth();
+  const { setSessionData } = useAuth();
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
@@ -64,14 +64,7 @@ export default function Login() {
         throw new Error("Unauthorized");
       }
 
-      const userDataResponse = await fetch(API_URL + "/user/me", {
-        method: "GET",
-        headers: {
-          Authorization: "Bearer " + result.data.token,
-        },
-      });
-      const userData = await userDataResponse.json();
-      login(result.data.token, userData.data.Merchant);
+      setSessionData(result.data.token);
       navigate("/cpd");
     } catch (error) {
       if (error.message === "Unauthorized") {
