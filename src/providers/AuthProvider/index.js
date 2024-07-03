@@ -26,7 +26,7 @@ export const AuthProvider = ({ children }) => {
     const newMerchantID = await getUserData(newToken);
     setMerchantID(newMerchantID);
     localStorage.setItem("token", newToken);
-    localStorage.setItem("expiry", new Date().getTime() + 60 * 2 * 3600);
+    localStorage.setItem("expiry", new Date().getTime() + 1000 * 30); // 30 seconds
   };
 
   const removeSessionData = () => {
@@ -42,9 +42,12 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const expiry = localStorage.getItem("expiry");
+
     if (token && expiry < new Date().getTime()) {
       removeSessionData();
     } else if (token) {
+      const timeDifference = Math.floor((expiry - new Date().getTime()) / 1000);
+      console.log("Time difference in seconds:", timeDifference);
       setSessionData(token, merchantID); // refresh expiry
     }
   }, []);
