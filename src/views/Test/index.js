@@ -4,6 +4,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 import MaterialInput from "../../components/MaterialInput";
+import { getDayRange } from "../../utils/getDayRange";
 
 const DateRangeDisplay = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(2),
@@ -20,45 +21,6 @@ const RangeItem = styled(Box)(({ theme }) => ({
 export default function Test() {
   const [selectedDate, setSelectedDate] = useState(moment());
   const [dateRange, setDateRange] = useState();
-
-  function getDayRange(moment, halfDay, renewDay) {
-    const day = moment.date();
-    const month = moment.month();
-    const year = moment.year();
-    if (isNaN(day)) return NaN;
-
-    const lastDayOfMonth = new Date(year, month + 1, 0).getDate();
-    const lastDayOfNextMonth = new Date(year, month + 2, 0).getDate();
-
-    if (day > lastDayOfMonth || day === 0) return false;
-
-    if (day <= halfDay) {
-      return [
-        {
-          start: new Date(year, month, 1),
-          end: new Date(year, month, lastDayOfMonth),
-        },
-      ];
-    } else if (day > halfDay && day <= renewDay) {
-      return [
-        {
-          start: new Date(year, month, halfDay + 1),
-          end: new Date(year, month, lastDayOfMonth),
-        },
-      ];
-    } else {
-      return [
-        {
-          start: new Date(year, month, halfDay + 1),
-          end: new Date(year, month, lastDayOfMonth),
-        },
-        {
-          start: new Date(year, month + 1, 1),
-          end: new Date(year, month + 1, lastDayOfNextMonth),
-        },
-      ];
-    }
-  }
 
   useEffect(() => {
     setDateRange(getDayRange(selectedDate, 15, 22));

@@ -1,68 +1,69 @@
-import React from "react";
-const { isEqual } = require("lodash");
+import moment from "moment";
+import { getDayRange } from "./utils/getDayRange";
 
-function case6(filterObject, defaultQuery) {
-  function isOnlyConsoleLog(func) {
-    const funcStr = func.toString();
-    const bodyMatch = funcStr.match(/{([\s\S]*)}/);
-    const body = bodyMatch[1].trim();
-    const consoleLogPattern = /^console\.log\(.*\);\s*$/;
-    const lines = body.split("\n").map((line) => line.trim());
-    return lines.every((line) => consoleLogPattern.test(line));
-  }
+describe("getDayRange", () => {
+  const halfDay = 15;
+  const renewDay = 25;
 
-  var query = filterObject;
-  Object.keys(query).forEach((key) => {
-    const value = query[key];
-    if (
-      value === null ||
-      value === undefined ||
-      value === "" ||
-      (Array.isArray(value) && value.length === 0) ||
-      typeof value === "object" ||
-      typeof value == "function" ||
-      React.isValidElement(value)
-    ) {
-      delete query[key];
-    }
+  test("returns 'invalid-date' for invalid date", () => {
+    const invalidDate = Date("invalid-date");
+    expect(getDayRange(invalidDate, halfDay, renewDay)).toBe("invalid-date");
   });
 
-  for (const key in defaultQuery) {
-    if (query[key] === undefined) {
-      query[key] = defaultQuery[key];
-    }
-  }
+  test("returns invalid-date for day exceeding last day of month", () => {
+    const invalidDay = moment("2023-04-31"); // April has 30 days
+    expect(getDayRange(invalidDay, halfDay, renewDay)).toBe("invalid-date");
+  });
 
-  console.log(query);
-  return query;
-}
-
-test(`case 6 checking`, () => {
-  const filterObject = {
-    phone: {
-      setter: () => {
-        console.log("asd");
+  test("returns correct range for day <= halfDay", () => {
+    const date = moment("2023-04-10");
+    const result = getDayRange(date, halfDay, renewDay);
+    expect(result).toEqual([
+      {
+        start: new Date(2023, 3, 1), // 2023 / 4 / 1
+        end: new Date(2023, 3, 30), // 2023 / 4 / 30
       },
-      photos: [],
-      boolean: false,
-      string: "",
-      object: {},
-      element: <div></div>,
-      nullValue: null,
-      undefinedValue: undefined,
-    },
-  };
-  const defaultQuery = {
-    _limit: 20,
-    _page: 1,
-    _populate: ["name", "age"],
-  };
-  const result = case6(filterObject, defaultQuery);
-  expect(
-    isEqual(result, {
-      _limit: 20,
-      _page: 1,
-      _populate: ["name", "age"],
-    })
-  ).toBeTruthy();
+    ]);
+  });
+
+  test("returns correct range for halfDay < day <= renewDay", () => {
+    const date = moment("2023-04-20");
+    const result = getDayRange(date, halfDay, renewDay);
+    expect(result).toEqual([
+      {
+        start: new Date(2023, 3, 16), // 2023 / 4 / 16
+        end: new Date(2023, 3, 30), // 2023 / 4 / 30
+      },
+    ]);
+  });
+
+  test("returns correct ranges for day > renewDay", () => {
+    const date = moment("2023-04-26");
+    const result = getDayRange(date, halfDay, renewDay);
+    expect(result).toEqual([
+      {
+        start: new Date(2023, 3, 16), // 2023 / 4 / 16
+        end: new Date(2023, 3, 30), // 2023 / 4 / 30
+      },
+      {
+        start: new Date(2023, 4, 1), // 2023 / 5 / 1
+        end: new Date(2023, 4, 31), // 2023 / 5 / 31
+      },
+    ]);
+  });
+
+  test("handles month rollover correctly", () => {
+    const date = moment("2023-12-26");
+    const result = getDayRange(date, halfDay, renewDay);
+    expect(result).toEqual([
+      {
+        start: new Date(2023, 11, 16), // 2023 / 12 / 16
+        end: new Date(2023, 11, 31), // 2023 / 12 / 31
+      },
+      {
+        start: new Date(2024, 0, 1), // 2024 / 1 / 1
+        end: new Date(2024, 0, 31), // 2024 / 1 / 31
+      },
+    ]);
+  });
 });
