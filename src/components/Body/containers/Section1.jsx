@@ -1,21 +1,25 @@
+import { BREAKPOINT } from "../../../constants";
 import {
   FilledImage,
   FlexDiv,
   StyledDiv,
   StyledSpan,
 } from "../../../globalStyles";
-import { Box, S1, S1BgImg, S1InfinityImg } from "../styles";
+import { Box, CardsContainer, S1, S1BgImg, S1InfinityImg } from "../styles";
 import DisplayCard from "./DisplayCard";
 
-export default function Section1() {
+export default function Section1({ winW }) {
   return (
     <S1>
       <S1BgImg src="top_bg-1.png" />
-      <FlexDiv $gap="20">
-        <StyledDiv height="113px">
+      <FlexDiv $gap="20" sx={{ flexDirection: "column" }}>
+        <StyledDiv
+          height={winW <= BREAKPOINT ? "197px" : "113px"}
+          margin=" 0 0 20px 0"
+        >
           <FilledImage src="circleIcon.png" />
         </StyledDiv>
-        <StyledDiv width="460px" height="127">
+        <StyledDiv width={winW <= BREAKPOINT ? "100%" : "460px"} height="127">
           <FilledImage src="circleIconText.png" />
         </StyledDiv>
         {/* <H2>
@@ -31,7 +35,12 @@ export default function Section1() {
         平台APP，不但帶你初嘗元宇宙虛擬新世界，同時連接現實世界，等你同時穿梭兩個世界食·玩·賞不分界限，一
         APP 在手，完成任務，玩遊戲，抽NFT，著數優惠無限大！
       </StyledSpan>
-      <FlexDiv $gap="30" $alignItems="end" relative>
+      <FlexDiv
+        $gap="30"
+        $alignItems="end"
+        relative
+        margin={winW <= BREAKPOINT ? "50px 0 0 0" : "0"}
+      >
         <Box big>
           <StyledDiv margin="0 0 10px 0">
             <FilledImage src="nft.png" />
@@ -48,14 +57,21 @@ export default function Section1() {
             2.4 ETH
           </StyledSpan>
         </Box>
-        <DisplayCard text="獨家獎賞" image="gift.png" />
-        <S1InfinityImg src="top_bg02.png" />
+        {winW <= BREAKPOINT ? null : (
+          <>
+            <DisplayCard text="獨家獎賞" image="gift.png" />
+            <S1InfinityImg src="top_bg02.png" />
+          </>
+        )}
       </FlexDiv>
-      <FlexDiv $gap="30" margin="0 0 150px 0">
+      <CardsContainer>
+        {winW > BREAKPOINT ? null : (
+          <DisplayCard text="獨家獎賞" image="gift.png" />
+        )}
         <DisplayCard text="VIP通行" image="vip.png" />
         <DisplayCard text="現金回贈" image="money.png" />
         <DisplayCard text="折扣優惠" image="discount.png" />
-      </FlexDiv>
+      </CardsContainer>
     </S1>
   );
 }

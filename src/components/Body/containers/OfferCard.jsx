@@ -1,9 +1,9 @@
 import { Divider, StyledSpan } from "../../../globalStyles";
 import { OfferBox } from "../styles";
 
-export default function OfferCard({ title, name, offer }) {
+export default function OfferCard({ title, name, offer, last = false }) {
   return (
-    <OfferBox>
+    <OfferBox last={last}>
       <StyledSpan color="#544635">{title}</StyledSpan>
       <Divider color="#544635" height="4px" />
       <StyledSpan color="#FF6B36">{name}折扣優惠高達</StyledSpan>

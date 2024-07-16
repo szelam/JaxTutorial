@@ -4,27 +4,35 @@ import Body from "./components/Body";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 import Navbar from "./components/Navbar";
+import UseMobile from "./components/UseMobile";
 
 function App() {
-  const [isMobile, setIsMobile] = useState(true);
+  const [winW, setWinW] = useState(true);
 
   useEffect(() => {
-    console.log(navigator.userAgent);
-    const isMobileDevice = /Mobi|Android/i.test(navigator.userAgent);
-    setIsMobile(isMobileDevice);
+    const handleResize = () => {
+      setWinW(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+    handleResize();
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
   }, []);
 
   return (
     <>
-      {isMobile ? (
+      {winW <= 1200 ? (
         <>
-          <Navbar />
-          <Header />
-          <Body />
-          <Footer />
+          <Navbar winW={winW} />
+          <Header winW={winW} />
+          <Body winW={winW} />
+          <Footer winW={winW} />
         </>
       ) : (
-        <div>Mobile</div>
+        <UseMobile />
       )}
     </>
   );

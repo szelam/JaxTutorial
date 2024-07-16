@@ -1,22 +1,18 @@
-import {
-  FilledImage,
-  FlexDiv,
-  StyledDiv,
-  StyledSpan,
-} from "../../../globalStyles";
+import { FilledImage, FlexDiv, StyledSpan } from "../../../globalStyles";
+import { TitleStars } from "../styles";
 
 export default function Title({ children }) {
   return (
-    <FlexDiv $gap="20" margin="120px 0 0 0">
-      <StyledDiv width="50px" height="66px">
+    <FlexDiv $gap="20" margin="120px 0 0 0" style={{ width: "max-content" }}>
+      <TitleStars>
         <FilledImage src="star1.png" />
-      </StyledDiv>
-      <StyledSpan color="#544635" fontSize="100">
+      </TitleStars>
+      <StyledSpan color="#544635" fontSize="100" sx={{ fontSize: "50" }}>
         {children}
       </StyledSpan>
-      <StyledDiv width="50px" height="66px">
+      <TitleStars>
         <FilledImage src="star1.png" />
-      </StyledDiv>
+      </TitleStars>
     </FlexDiv>
   );
 }

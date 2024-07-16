@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useMemo, useRef, useState } from "react";
+import { BREAKPOINT } from "../../constants";
 import {
   FilledImage,
   FlexDiv,
@@ -10,8 +11,8 @@ import Title from "./containers/Title";
 import {
   AvatarBg,
   AvatarImg,
+  CharacterBottomGroup,
   CharacterBox,
-  LastTimelineAccessory,
   NFTImg,
   S3,
   S3BgImg,
@@ -22,15 +23,35 @@ import {
   TimelineText,
 } from "./styles";
 
-export default function Section3() {
+export default function Section3({ winW }) {
   const [character, setCharacter] = useState(0);
+  const ref1 = useRef();
+  const ref2 = useRef();
+  const timelineHeight = useMemo(() => {
+    if (ref1.current && ref2.current) {
+      const element1Rect = ref1.current.getBoundingClientRect();
+      const element2Rect = ref2.current.getBoundingClientRect();
+      const verticalDistance =
+        element2Rect.top - element1Rect.bottom + element2Rect.height + 2;
+      console.log(verticalDistance);
+      return verticalDistance;
+    }
+    return 0;
+  }, [
+    ref1?.current?.getBoundingClientRect(),
+    ref2?.current?.getBoundingClientRect(),
+  ]);
+
   return (
     <S3>
       <S3BgImg src="bageBg.png" />
       <S3Section>
         <Title>角色介紹</Title>
         <CharacterBox>
-          <StyledSpan color="#FF7E50" fontSize="90">
+          <StyledSpan
+            color="#FF7E50"
+            fontSize={winW <= BREAKPOINT ? "30" : "90"}
+          >
             {CHARACTERS[character].name}
           </StyledSpan>
         </CharacterBox>
@@ -42,55 +63,60 @@ export default function Section3() {
             />
           </AvatarBg>
         </CharacterBox>
-        <CharacterBox padding="40px">
-          {[0, 1, 2].map((i) => (
-            <StyledDiv flexBasis="100%">
-              <FlexDiv $gap="20">
-                <StyledDiv height="49px">
-                  <FilledImage src={`Character/into_icon0${i + 1}.png`} />
-                </StyledDiv>
-                <StyledSpan fontSize="35">
-                  {i === 0 ? "背景" : i === 1 ? "外型" : "能力"}
-                </StyledSpan>
-              </FlexDiv>
-              {
-                CHARACTERS[character][
-                  i === 0 ? "d_bg" : i === 1 ? "d_look" : "d_power"
-                ]
-              }
-            </StyledDiv>
-          ))}
-        </CharacterBox>
-        <FlexDiv $gap="40">
-          {CHARACTERS.map((c, i) => (
-            <StyledDiv
-              position="relative"
-              opacity={character === i ? 1 : 0.5}
-              onClick={() => setCharacter(i)}
-            >
-              <img src="Character/button_border01.svg" />
-              <img
-                src={`Character/avatar0${i + 1}.svg`}
-                style={{
-                  position: "absolute",
-                  left: "0",
-                }}
-              />
-            </StyledDiv>
-          ))}
-        </FlexDiv>
+        <CharacterBottomGroup>
+          <CharacterBox padding="40px">
+            {[0, 1, 2].map((i) => (
+              <StyledDiv flexBasis="100%">
+                <FlexDiv $gap="20">
+                  <StyledDiv height="49px">
+                    <FilledImage src={`Character/into_icon0${i + 1}.png`} />
+                  </StyledDiv>
+                  <StyledSpan fontSize="35">
+                    {i === 0 ? "背景" : i === 1 ? "外型" : "能力"}
+                  </StyledSpan>
+                </FlexDiv>
+                {
+                  CHARACTERS[character][
+                    i === 0 ? "d_bg" : i === 1 ? "d_look" : "d_power"
+                  ]
+                }
+              </StyledDiv>
+            ))}
+          </CharacterBox>
+          <FlexDiv
+            $gap="40"
+            style={winW <= BREAKPOINT ? { transform: "scale(0.7)" } : {}}
+          >
+            {CHARACTERS.map((c, i) => (
+              <StyledDiv
+                position="relative"
+                opacity={character === i ? 1 : 0.5}
+                onClick={() => setCharacter(i)}
+              >
+                <img src="Character/button_border01.svg" />
+                <img
+                  src={`Character/avatar0${i + 1}.svg`}
+                  style={{
+                    position: "absolute",
+                    left: "0",
+                  }}
+                />
+              </StyledDiv>
+            ))}
+          </FlexDiv>
+        </CharacterBottomGroup>
         <Title>NFT畫廊</Title>
         <FlexDiv relative $gap="20">
           <NFTImg src="nft3.png" />
           <NFTImg src="nft1.png" />
           <NFTImg src="nft2.png" />
-          <NFTImg src="nft3.png" offset="120px" />
+          <NFTImg src="nft3.png" offset={winW <= 900 ? "60px" : "120px"} />
         </FlexDiv>
         <FlexDiv relative $gap="20">
           <NFTImg src="nft1.png" />
           <NFTImg src="nft2.png" />
           <NFTImg src="nft3.png" />
-          <NFTImg src="nft1.png" offset="-200px" />
+          <NFTImg src="nft1.png" offset={winW <= 900 ? "200px" : "-200px"} />
         </FlexDiv>
         <Title>故事簡介</Title>
       </S3Section>
@@ -103,6 +129,7 @@ export default function Section3() {
           fontSize="40"
           textAlign="center"
           margin="20px 0 0 0 "
+          sx={{ fontSize: "18" }}
         >
           獅頭仔牙DAN收到佢嘅第一次任務地點,就係要去香港發掘好玩好食新元素,就係咁牙DAN就係香港開展咗探索之旅。
         </StyledSpan>
@@ -148,13 +175,16 @@ export default function Section3() {
           <TimelineText>
             - 代幣獎勵計劃上線 <br />- 應用程序第三版（代幣和商戶POS功能）上線
           </TimelineText>
-          <TImelineStamp>2025年Q1</TImelineStamp>
+          <TImelineStamp length={winW <= 900 ? "300px" : "700px"}>
+            2025年Q1
+          </TImelineStamp>
           <TimelineText>- 第一波全球品牌及影響者評選特權上線</TimelineText>
-          <TImelineStamp length="440px">2025年Q2 </TImelineStamp>
+          <TImelineStamp length={timelineHeight + "px"} ref={ref1}>
+            2025年Q2{" "}
+          </TImelineStamp>
           <TimelineText>- 第二波全球品牌及影響者評選特權上線</TimelineText>
-          <TImelineStamp length="0px">
+          <TImelineStamp length="0px" ref={ref2}>
             2025年Q3
-            <LastTimelineAccessory />
           </TImelineStamp>
           <TimelineText>- 第三波全球品牌及影響者評選特權上線</TimelineText>
         </TimelineContainer>

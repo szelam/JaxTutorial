@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { BREAKPOINT } from "./constants";
 
 export const StyledSpan = styled.span`
   color: ${({ color }) => color};
@@ -9,9 +10,10 @@ export const StyledSpan = styled.span`
   width: ${({ width }) => width};
   text-align: ${({ textAlign }) => textAlign};
 
-  @media (max-width: 980px) {
+  @media (max-width: ${BREAKPOINT}px) {
     font-size: ${({ sx }) => `${sx?.fontSize}px`};
     margin: ${({ sx }) => sx?.margin};
+    text-align: ${({ sx }) => sx?.textAlign};
   }
 `;
 
@@ -32,7 +34,7 @@ export const StyledDiv = styled.div`
 export const FilledImage = styled.img`
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: ${({ objectFit }) => objectFit || "contain"};
   position: ${({ absolute }) => (absolute ? "absolute" : "static")};
 `;
 
@@ -46,13 +48,14 @@ export const FlexDiv = styled.div`
   justify-content: ${({ $justifyContent }) => $justifyContent};
   gap: ${({ $gap }) => $gap && `${$gap}px`};
 
-  @media (max-width: 980px) {
+  @media (max-width: ${BREAKPOINT}px) {
     font-size: ${({ sx }) => sx?.fontSize};
     margin: ${({ sx }) => sx?.margin};
     padding: ${({ sx }) => sx?.padding};
     justify-content: ${({ sx }) => sx?.justifyContent};
     align-items: ${({ sx }) => sx?.alignItems};
     flex-direction: ${({ sx }) => sx?.flexDirection};
+    flex-wrap: ${({ sx }) => sx?.flexWrap};
   }
 `;
 

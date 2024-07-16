@@ -1,3 +1,4 @@
+import { BREAKPOINT } from "../../constants";
 import {
   FilledImage,
   FlexDiv,
@@ -6,13 +7,17 @@ import {
 } from "../../globalStyles";
 import { ActionButton, Banner, Foot } from "./styles";
 
-export default function Footer() {
+export default function Footer({ winW }) {
   return (
     <Foot>
       <Banner src="banner_02.png" />
-      <FlexDiv>
-        <StyledSpan fontSize="20" margin=" 0 25px 0 0">
-          成為Chaingate會員，尊享
+      <FlexDiv sx={{ flexDirection: "column", justifyContent: "center" }}>
+        <StyledSpan
+          fontSize="20"
+          margin=" 0 25px 0 0"
+          sx={{ fontSize: "15", margin: "0 0 15px 0", textAlign: "center" }}
+        >
+          成為Chaingate會員{winW <= BREAKPOINT ? <br /> : "，"}尊享
           <StyledSpan color="#EA7500" $fontWeight="600">
             無盡優惠
           </StyledSpan>

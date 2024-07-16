@@ -1,29 +1,33 @@
+import { BREAKPOINT } from "../../constants";
 import { FilledImage, StyledDiv, StyledSpan } from "../../globalStyles";
 import { ActionButton, BgImg, Coin, Head } from "./styles";
 
-export default function Header() {
+export default function Header({ winW }) {
   return (
     <Head>
-      <BgImg src="HomePromoteBanner.png" />
-      {/* <H1>
-        <StyledSpan color="#EA7500">
-          香港
-          <StyledSpan color="#5550E8">食·玩·賞</StyledSpan>
-          <br />
-          Web3 平台
-        </StyledSpan>
-      </H1>
-      <StyledSpan fontSize="20" color="#5550E8" margin="10px 0 20px 0">
-        玩遊戲．抽NFT．著數優惠無限大
-      </StyledSpan> */}
-      <StyledDiv width="393px" height="210px" margin="0 0 15px 0">
-        <FilledImage src="web3Text.png" />
-      </StyledDiv>
+      <BgImg
+        src={`HomePromoteBanner${winW <= BREAKPOINT ? "mobile" : ""}.png`}
+      />
+      {winW <= BREAKPOINT ? (
+        <>
+          <FilledImage src="Web3TextMobile.png" />
+        </>
+      ) : (
+        <StyledDiv margin="0 420px 0 0">
+          <StyledDiv width="100%" height="210px" margin="0 0 15px 0">
+            <FilledImage src="web3Text.png" />
+          </StyledDiv>
+        </StyledDiv>
+      )}
       <ActionButton>
         開始遊戲
         <Coin src="image.svg" />
       </ActionButton>
-      <StyledSpan color="#5550E8" margin="150px 0 0 0" fontSize="12">
+      <StyledSpan
+        color="#5550E8"
+        margin={winW <= BREAKPOINT ? "35px 35px 160px 35px" : `150px 0 0 0`}
+        fontSize={winW <= BREAKPOINT ? "9" : "12"}
+      >
         條款及細則： - Chaingate保留最終決定權。
         <br />
         -

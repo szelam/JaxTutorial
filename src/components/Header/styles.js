@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { BREAKPOINT } from "../../constants";
 
 export const Head = styled.header`
   width: 100%;
@@ -8,6 +9,12 @@ export const Head = styled.header`
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
+
+  @media (max-width: ${BREAKPOINT}px) {
+    margin-top: 40px;
+    padding: 40px 0 0 0;
+    align-items: center;
+  }
 `;
 
 export const H1 = styled.h1`
@@ -39,6 +46,14 @@ export const ActionButton = styled.button`
   border-radius: 66px;
   opacity: 1;
   position: relative;
+  margin-right: 50px;
+
+  @media (max-width: ${BREAKPOINT}px) {
+    width: 256px;
+    font-size: 29px;
+    padding-left: 60px;
+    margin-top: 20px;
+  }
 `;
 
 export const Coin = styled.img`

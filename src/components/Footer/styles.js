@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { BREAKPOINT } from "../../constants";
 
 export const Foot = styled.footer`
   height: 146px;
@@ -14,6 +15,10 @@ export const Foot = styled.footer`
   padding: 20px;
   box-sizing: border-box;
   position: relative;
+
+  @media (max-width: ${BREAKPOINT}px) {
+    height: 200px;
+  }
 `;
 
 export const Banner = styled.img`
@@ -23,6 +28,13 @@ export const Banner = styled.img`
   z-index: 1;
   right: 0;
   top: -190px;
+
+  @media (max-width: ${BREAKPOINT}px) {
+    width: 100%;
+    height: 134px;
+    top: -124px;
+    object-fit: contain;
+  }
 `;
 
 export const ActionButton = styled.button`
