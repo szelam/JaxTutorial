@@ -1,38 +1,61 @@
-.App {
-  text-align: center;
+:root {
+  /* Colors: */
+  --unnamed-color-ec595c: #ec595c;
+  --unnamed-color-ff7e50: #ff7e50;
+  --unnamed-color-181560: #181560;
+  --unnamed-color-ff6b36: #ff6b36;
+
+  /* Font/text values */
+  --unnamed-font-family-poppins: Poppins;
+  --unnamed-font-family-pingfang-tc: PingFang TC;
+  --unnamed-font-family-setofont: SetoFont;
+  --unnamed-font-style-normal: normal;
+  --unnamed-font-weight-300: 300px;
+  --unnamed-font-weight-600: 600px;
+  --unnamed-font-weight-normal: normal;
+  --unnamed-font-size-30: 30px;
+  --unnamed-font-size-40: 40px;
+  --unnamed-font-size-70: 70px;
+  --unnamed-character-spacing-0: 0px;
+  --unnamed-line-spacing-45: 45px;
+  --unnamed-line-spacing-75: 75px;
+  --unnamed-line-spacing-84: 84px;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+/* Character Styles */
+.unnamed-character-style-1 {
+  font-family: var(--unnamed-font-family-poppins);
+  font-style: var(--unnamed-font-style-normal);
+  font-weight: var(--unnamed-font-weight-600);
+  font-size: var(--unnamed-font-size-40);
+  line-height: var(--unnamed-line-spacing-45);
+  letter-spacing: var(--unnamed-character-spacing-0);
+  color: var(--unnamed-color-181560);
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.unnamed-character-style-2 {
+  font-family: var(--unnamed-font-family-pingfang-tc);
+  font-style: var(--unnamed-font-style-normal);
+  font-weight: var(--unnamed-font-weight-600);
+  font-size: var(--unnamed-font-size-70);
+  line-height: var(--unnamed-line-spacing-75);
+  letter-spacing: var(--unnamed-character-spacing-0);
+  color: var(--unnamed-color-ff6b36);
 }
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.unnamed-character-style-3 {
+  font-family: var(--unnamed-font-family-poppins);
+  font-style: var(--unnamed-font-style-normal);
+  font-weight: var(--unnamed-font-weight-300);
+  font-size: var(--unnamed-font-size-30);
+  line-height: var(--unnamed-line-spacing-45);
+  letter-spacing: var(--unnamed-character-spacing-0);
+  color: var(--unnamed-color-181560);
 }
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.unnamed-character-style-4 {
+  font-family: var(--unnamed-font-family-setofont);
+  font-style: var(--unnamed-font-style-normal);
+  font-weight: var(--unnamed-font-weight-normal);
+  font-size: var(--unnamed-font-size-70);
+  line-height: var(--unnamed-line-spacing-84);
+  letter-spacing: var(--unnamed-character-spacing-0);
+  color: var(--unnamed-color-ff7e50);
 }
