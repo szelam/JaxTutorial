@@ -29,6 +29,21 @@ export const StyledDiv = styled.div`
   bottom: ${({ bottom }) => bottom};
   flex-basis: ${({ flexBasis }) => flexBasis};
   opacity: ${({ opacity }) => opacity};
+  display: ${({ display }) => display};
+
+  @media (max-width: ${BREAKPOINT}px) {
+    width: ${({ sx }) => sx?.width};
+    height: ${({ sx }) => sx?.height};
+    margin: ${({ sx }) => sx?.margin};
+    position: ${({ sx }) => sx?.position};
+    top: ${({ sx }) => sx?.top};
+    left: ${({ sx }) => sx?.left};
+    right: ${({ sx }) => sx?.right};
+    bottom: ${({ sx }) => sx?.bottom};
+    flex-basis: ${({ sx }) => sx?.flexBasis};
+    opacity: ${({ sx }) => sx?.opacity};
+    display: ${({ sx }) => sx?.display};
+  }
 `;
 
 export const FilledImage = styled.img`

@@ -1,3 +1,4 @@
+import Marquee from "react-fast-marquee";
 import styled from "styled-components";
 import { BREAKPOINT } from "../../constants";
 
@@ -154,6 +155,13 @@ export const CharacterBottomGroup = styled.div`
     flex-direction: column-reverse;
   }
 `;
+export const CharacterButtonsContainer = styled.div`
+  display: flex;
+  gap: 40px;
+  @media (max-width: ${BREAKPOINT}px) {
+    transform: scale(0.7);
+  }
+`;
 
 export const CharacterBox = styled.div`
   width: 100%;
@@ -219,14 +227,23 @@ export const S3TimelineBgImg = styled.img`
   }
 `;
 
+export const NFTMarquee = styled(Marquee)`
+  margin-top: 30px;
+
+  @media (max-width: ${BREAKPOINT}px) {
+    margin-top: 15px;
+  }
+`;
+
 export const NFTImg = styled.img`
   width: 297px;
   height: 296px;
-  margin-right: ${({ offset }) => offset || "0"};
+  margin-right: 30px;
 
   @media (max-width: ${BREAKPOINT}px) {
     width: 150px;
     height: 150px;
+    margin-right: 15px;
   }
 `;
 
@@ -266,7 +283,7 @@ export const TImelineStamp = styled.div`
     content: "";
     position: absolute;
     width: 5px;
-    height: ${({ length }) => length || "600px"};
+    height: ${({ length }) => length || "700px"};
     background-color: white;
     left: -51px;
     top: 50%;
@@ -283,6 +300,7 @@ export const TImelineStamp = styled.div`
 
     &::after {
       left: -21px;
+      height: ${({ length }) => length || "300px"};
     }
   }
 `;

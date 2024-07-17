@@ -1,5 +1,4 @@
-import { useMemo, useRef, useState } from "react";
-import { BREAKPOINT } from "../../constants";
+import { useEffect, useRef, useState } from "react";
 import {
   FilledImage,
   FlexDiv,
@@ -13,7 +12,9 @@ import {
   AvatarImg,
   CharacterBottomGroup,
   CharacterBox,
+  CharacterButtonsContainer,
   NFTImg,
+  NFTMarquee,
   S3,
   S3BgImg,
   S3Section,
@@ -23,43 +24,38 @@ import {
   TimelineText,
 } from "./styles";
 
-export default function Section3({ winW }) {
+export default function Section3() {
   const [character, setCharacter] = useState(0);
   const ref1 = useRef();
   const ref2 = useRef();
-  const timelineHeight = useMemo(() => {
+  const [timelineHeight, setTimelineHeight] = useState(0);
+
+  useEffect(() => {
     if (ref1.current && ref2.current) {
       const element1Rect = ref1.current.getBoundingClientRect();
       const element2Rect = ref2.current.getBoundingClientRect();
       const verticalDistance =
         element2Rect.top - element1Rect.bottom + element2Rect.height + 2;
-      console.log(verticalDistance);
-      return verticalDistance;
+      setTimelineHeight(verticalDistance);
     }
-    return 0;
-  }, [
-    ref1?.current?.getBoundingClientRect(),
-    ref2?.current?.getBoundingClientRect(),
-  ]);
+  }, []);
 
   return (
     <S3>
-      <S3BgImg src="bageBg.png" />
+      <S3BgImg src="bageBg.png" alt="" />
       <S3Section>
         <Title>角色介紹</Title>
         <CharacterBox>
-          <StyledSpan
-            color="#FF7E50"
-            fontSize={winW <= BREAKPOINT ? "30" : "90"}
-          >
+          <StyledSpan color="#FF7E50" fontSize="90" sx={{ fontSize: "30" }}>
             {CHARACTERS[character].name}
           </StyledSpan>
         </CharacterBox>
         <CharacterBox big>
-          <AvatarImg src={`Character/${CHARACTERS[character].id}.png`} />
+          <AvatarImg src={`Character/${CHARACTERS[character].id}.png`} alt="" />
           <AvatarBg width="100%" height="100%">
             <img
               src={`Character/${CHARACTERS[character].id.toLowerCase()}_bg.png`}
+              alt=""
             />
           </AvatarBg>
         </CharacterBox>
@@ -83,41 +79,41 @@ export default function Section3({ winW }) {
               </StyledDiv>
             ))}
           </CharacterBox>
-          <FlexDiv
-            $gap="40"
-            style={winW <= BREAKPOINT ? { transform: "scale(0.7)" } : {}}
-          >
+          <CharacterButtonsContainer>
             {CHARACTERS.map((c, i) => (
               <StyledDiv
                 position="relative"
                 opacity={character === i ? 1 : 0.5}
                 onClick={() => setCharacter(i)}
               >
-                <img src="Character/button_border01.svg" />
+                <img src="Character/button_border01.svg" alt="" />
                 <img
                   src={`Character/avatar0${i + 1}.svg`}
                   style={{
                     position: "absolute",
                     left: "0",
                   }}
+                  alt=""
                 />
               </StyledDiv>
             ))}
-          </FlexDiv>
+          </CharacterButtonsContainer>
         </CharacterBottomGroup>
         <Title>NFT畫廊</Title>
-        <FlexDiv relative $gap="20">
-          <NFTImg src="nft3.png" />
-          <NFTImg src="nft1.png" />
-          <NFTImg src="nft2.png" />
-          <NFTImg src="nft3.png" offset={winW <= 900 ? "60px" : "120px"} />
-        </FlexDiv>
-        <FlexDiv relative $gap="20">
-          <NFTImg src="nft1.png" />
-          <NFTImg src="nft2.png" />
-          <NFTImg src="nft3.png" />
-          <NFTImg src="nft1.png" offset={winW <= 900 ? "200px" : "-200px"} />
-        </FlexDiv>
+      </S3Section>
+      <NFTMarquee>
+        <NFTImg src="nft3.png" alt="" />
+        <NFTImg src="nft1.png" alt="" />
+        <NFTImg src="nft2.png" alt="" />
+        <NFTImg src="nft3.png" alt="" />
+      </NFTMarquee>
+      <NFTMarquee speed={70} direction="right">
+        <NFTImg src="nft1.png" alt="" />
+        <NFTImg src="nft2.png" alt="" />
+        <NFTImg src="nft3.png" alt="" />
+        <NFTImg src="nft1.png" alt="" />
+      </NFTMarquee>
+      <S3Section>
         <Title>故事簡介</Title>
       </S3Section>
       <StyledDiv width="100%" margin="40px 0 0 0">
@@ -175,12 +171,10 @@ export default function Section3({ winW }) {
           <TimelineText>
             - 代幣獎勵計劃上線 <br />- 應用程序第三版（代幣和商戶POS功能）上線
           </TimelineText>
-          <TImelineStamp length={winW <= 900 ? "300px" : "700px"}>
-            2025年Q1
-          </TImelineStamp>
+          <TImelineStamp>2025年Q1</TImelineStamp>
           <TimelineText>- 第一波全球品牌及影響者評選特權上線</TimelineText>
           <TImelineStamp length={timelineHeight + "px"} ref={ref1}>
-            2025年Q2{" "}
+            2025年Q2
           </TImelineStamp>
           <TimelineText>- 第二波全球品牌及影響者評選特權上線</TimelineText>
           <TImelineStamp length="0px" ref={ref2}>

@@ -23,6 +23,17 @@ export const H1 = styled.h1`
   font-size: 70px;
 `;
 
+export const TermsContainer = styled.span`
+  color: #5550e8;
+  margin: 150px 0 0 0;
+  font-size: 12px;
+
+  @media (max-width: ${BREAKPOINT}px) {
+    font-size: 9px;
+    margin: 35px 35px 160px 35px;
+  }
+`;
+
 export const BgImg = styled.img`
   width: 100%;
   object-fit: contain;

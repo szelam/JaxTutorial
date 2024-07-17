@@ -1,12 +1,11 @@
-import { BREAKPOINT } from "../../../constants";
 import { FilledImage, FlexDiv, StyledDiv } from "../../../globalStyles";
 import { LionContainer, S2 } from "../styles";
 import OfferCard from "./OfferCard";
 
-export default function Section2({ winW }) {
+export default function Section2() {
   return (
     <S2>
-      {winW > BREAKPOINT && (
+      <StyledDiv sx={{ display: "none" }}>
         <>
           <StyledDiv
             width="76px"
@@ -36,17 +35,17 @@ export default function Section2({ winW }) {
             <FilledImage src="star2.png " />
           </StyledDiv>
         </>
-      )}
+      </StyledDiv>
 
-      <FlexDiv margin={winW <= BREAKPOINT ? "0" : "0 80px -15px 0"}>
+      <FlexDiv margin="0" sx={{ margin: "0 80px -15px 0" }}>
         <LionContainer>
           <FilledImage src="lion01.png" />
         </LionContainer>
-        {winW > BREAKPOINT && (
+        <StyledDiv sx={{ display: "none" }}>
           <StyledDiv width="453px" height="153px">
             <FilledImage src="monthlyText.png" />
           </StyledDiv>
-        )}
+        </StyledDiv>
       </FlexDiv>
       <FlexDiv $gap="20" sx={{ flexDirection: "column" }}>
         <OfferCard title="7月優惠" name="XXXX" offer="30%" />

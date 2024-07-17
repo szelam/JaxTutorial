@@ -1,9 +1,10 @@
-import { FilledImage, StyledDiv } from "../globalStyles";
+import { FilledImage } from "../../globalStyles";
+import { Container } from "./styles";
 
 export default function UseMobile() {
   return (
-    <StyledDiv height="100vh">
+    <Container>
       <FilledImage src="DeskTopVersion.png" objectFit="cover" />
-    </StyledDiv>
+    </Container>
   );
 }

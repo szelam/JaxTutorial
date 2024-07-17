@@ -1,4 +1,3 @@
-import { BREAKPOINT } from "../../../constants";
 import {
   FilledImage,
   FlexDiv,
@@ -8,18 +7,15 @@ import {
 import { Box, CardsContainer, S1, S1BgImg, S1InfinityImg } from "../styles";
 import DisplayCard from "./DisplayCard";
 
-export default function Section1({ winW }) {
+export default function Section1() {
   return (
     <S1>
       <S1BgImg src="top_bg-1.png" />
       <FlexDiv $gap="20" sx={{ flexDirection: "column" }}>
-        <StyledDiv
-          height={winW <= BREAKPOINT ? "197px" : "113px"}
-          margin=" 0 0 20px 0"
-        >
+        <StyledDiv height="113px" sx={{ height: "197px" }} margin=" 0 0 20px 0">
           <FilledImage src="circleIcon.png" />
         </StyledDiv>
-        <StyledDiv width={winW <= BREAKPOINT ? "100%" : "460px"} height="127">
+        <StyledDiv width="460px" sx={{ width: "100%" }} height="127">
           <FilledImage src="circleIconText.png" />
         </StyledDiv>
         {/* <H2>
@@ -39,7 +35,8 @@ export default function Section1({ winW }) {
         $gap="30"
         $alignItems="end"
         relative
-        margin={winW <= BREAKPOINT ? "50px 0 0 0" : "0"}
+        sx={{ margin: "50px 0 0 0" }}
+        margin="0"
       >
         <Box big>
           <StyledDiv margin="0 0 10px 0">
@@ -57,17 +54,17 @@ export default function Section1({ winW }) {
             2.4 ETH
           </StyledSpan>
         </Box>
-        {winW <= BREAKPOINT ? null : (
-          <>
-            <DisplayCard text="獨家獎賞" image="gift.png" />
-            <S1InfinityImg src="top_bg02.png" />
-          </>
-        )}
+        <StyledDiv sx={{ display: "none" }}>
+          <DisplayCard text="獨家獎賞" image="gift.png" />
+        </StyledDiv>
+        <StyledDiv sx={{ display: "none" }}>
+          <S1InfinityImg src="top_bg02.png" />
+        </StyledDiv>
       </FlexDiv>
       <CardsContainer>
-        {winW > BREAKPOINT ? null : (
+        <StyledDiv sx={{ display: "block" }} display="none">
           <DisplayCard text="獨家獎賞" image="gift.png" />
-        )}
+        </StyledDiv>
         <DisplayCard text="VIP通行" image="vip.png" />
         <DisplayCard text="現金回贈" image="money.png" />
         <DisplayCard text="折扣優惠" image="discount.png" />
