@@ -2,9 +2,9 @@ import styled from "styled-components";
 import { BREAKPOINT } from "../../constants";
 
 export const ButtonContainer = styled.button`
-  width: 386px;
-  height: 90px;
-  font-size: 25px;
+  width: ${({ responsive }) => (responsive === false ? "206px" : "386px")};
+  height: ${({ responsive }) => (responsive === false ? "47px" : "90px")};
+  font-size: ${({ responsive }) => (responsive === false ? "15px" : "25px")};
   text-align: center;
   display: flex;
   justify-content: center;

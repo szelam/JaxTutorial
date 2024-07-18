@@ -11,7 +11,7 @@ export const S1 = styled.section`
   align-items: center;
 
   @media (max-width: ${BREAKPOINT}px) {
-    padding: 0px 50px;
+    padding: 0px 40px;
     gap: 20px;
   }
 `;
@@ -23,7 +23,7 @@ export const H2 = styled.h2`
 `;
 
 export const Box = styled.div`
-  width: ${({ big }) => (big ? "427px" : "206px")};
+  width: ${({ big }) => (big ? "442px" : "206px")};
   height: ${({ big }) => (big ? "530px" : "250px")};
   padding: 30px;
   box-sizing: border-box;
@@ -38,6 +38,19 @@ export const Box = styled.div`
     height: auto;
     padding: 20px;
     /* flex-basis: calc(50% - 30px); */
+  }
+`;
+
+export const BigCardContainer = styled.div`
+  display: flex;
+  gap: 30px;
+  align-items: end;
+  position: relative;
+  margin: 0;
+
+  @media (max-width: ${BREAKPOINT}px) {
+    margin: 50px 0 0 0;
+    width: 100%;
   }
 `;
 
@@ -70,6 +83,10 @@ export const S1InfinityImg = styled.img`
   width: 441px;
   height: 190px;
   position: absolute;
+
+  @media (max-width: ${BREAKPOINT}px) {
+    display: none;
+  }
 `;
 
 export const S2 = styled.section`
@@ -139,7 +156,7 @@ export const S3Section = styled.div`
   overflow: hidden;
   padding: ${({ padding }) => padding || "0 100px"};
   @media (max-width: ${BREAKPOINT}px) {
-    padding: 0 50px;
+    padding: 0 40px;
   }
 `;
 
@@ -180,7 +197,6 @@ export const CharacterBox = styled.div`
   @media (max-width: ${BREAKPOINT}px) {
     border-width: 5px;
     flex-direction: column;
-    align-items: center;
     padding: 20px;
   }
 `;
@@ -190,7 +206,7 @@ export const AvatarImg = styled.img`
   z-index: 1;
 
   @media (max-width: ${BREAKPOINT}px) {
-    width: 130%;
+    height: 105%;
   }
 `;
 

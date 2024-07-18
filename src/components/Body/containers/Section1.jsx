@@ -4,7 +4,14 @@ import {
   StyledDiv,
   StyledSpan,
 } from "../../../globalStyles";
-import { Box, CardsContainer, S1, S1BgImg, S1InfinityImg } from "../styles";
+import {
+  BigCardContainer,
+  Box,
+  CardsContainer,
+  S1,
+  S1BgImg,
+  S1InfinityImg,
+} from "../styles";
 import DisplayCard from "./DisplayCard";
 
 export default function Section1() {
@@ -31,13 +38,7 @@ export default function Section1() {
         平台APP，不但帶你初嘗元宇宙虛擬新世界，同時連接現實世界，等你同時穿梭兩個世界食·玩·賞不分界限，一
         APP 在手，完成任務，玩遊戲，抽NFT，著數優惠無限大！
       </StyledSpan>
-      <FlexDiv
-        $gap="30"
-        $alignItems="end"
-        relative
-        sx={{ margin: "50px 0 0 0" }}
-        margin="0"
-      >
+      <BigCardContainer>
         <Box big>
           <StyledDiv margin="0 0 10px 0">
             <FilledImage src="nft.png" />
@@ -57,10 +58,8 @@ export default function Section1() {
         <StyledDiv sx={{ display: "none" }}>
           <DisplayCard text="獨家獎賞" image="gift.png" />
         </StyledDiv>
-        <StyledDiv sx={{ display: "none" }}>
-          <S1InfinityImg src="top_bg02.png" />
-        </StyledDiv>
-      </FlexDiv>
+        <S1InfinityImg src="top_bg02.png" />
+      </BigCardContainer>
       <CardsContainer>
         <StyledDiv sx={{ display: "block" }} display="none">
           <DisplayCard text="獨家獎賞" image="gift.png" />

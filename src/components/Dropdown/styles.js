@@ -49,6 +49,7 @@ export const ActionsContainer = styled.div`
   @media (max-width: ${BREAKPOINT}px) {
     justify-content: center;
     gap: 40px;
+    padding-top: 0;
   }
 `;
 

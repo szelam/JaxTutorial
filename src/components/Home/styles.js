@@ -27,7 +27,7 @@ export const TermsContainer = styled.span`
   font-size: 12px;
 
   @media (max-width: ${BREAKPOINT}px) {
-    font-size: 9px;
+    font-size: 8px;
     margin: 35px 35px 0 35px;
   }
 `;
