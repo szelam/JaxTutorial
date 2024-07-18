@@ -1,11 +1,11 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import {
   FilledImage,
   FlexDiv,
   StyledDiv,
   StyledSpan,
 } from "../../globalStyles";
-import { CHARACTERS } from "./constants";
+import { CHARACTERS, TIMELINE_DATA } from "./constants";
 import Title from "./containers/Title";
 import {
   AvatarBg,
@@ -20,25 +20,11 @@ import {
   S3Section,
   S3TimelineBgImg,
   TimelineContainer,
-  TImelineStamp,
-  TimelineText,
 } from "./styles";
+import TimelineItem from "./TimelineItem";
 
 export default function Section3() {
   const [character, setCharacter] = useState(0);
-  const ref1 = useRef();
-  const ref2 = useRef();
-  const [timelineHeight, setTimelineHeight] = useState(0);
-
-  useEffect(() => {
-    if (ref1.current && ref2.current) {
-      const element1Rect = ref1.current.getBoundingClientRect();
-      const element2Rect = ref2.current.getBoundingClientRect();
-      const verticalDistance =
-        element2Rect.top - element1Rect.bottom + element2Rect.height + 2;
-      setTimelineHeight(verticalDistance);
-    }
-  }, []);
 
   return (
     <S3>
@@ -139,48 +125,16 @@ export default function Section3() {
       <S3Section padding="0 210px">
         <Title>未來計劃</Title>
         <S3TimelineBgImg src="time_line_bg.jpg" />
+
         <TimelineContainer>
-          <TImelineStamp>2023年Q3</TImelineStamp>
-          <TimelineText>
-            - CG NFT第一波發布（20,000個NFT免費鑄幣）
-            <br /> - 10,000個NFT預留，用於商戶/重要合作夥伴招募
-          </TimelineText>
-          <TImelineStamp>2023年Q4</TImelineStamp>
-          <TimelineText>
-            - 應用程序第一版上線 <br />- 第一波商戶特權公布
-          </TimelineText>
-          <TImelineStamp>2024年Q1</TImelineStamp>
-          <TimelineText>
-            - 第一波商戶特權 <br /> - NFT及P2E發布，CG
-            NFT第二波發布（20,000個NFT，0.02 ETH=199.71港幣）
-            <br /> - 第二波商戶特權公布 <br /> - 代幣上線和質押獎勵上線
-          </TimelineText>
-          <TImelineStamp>2024年Q2</TImelineStamp>
-          <TimelineText>
-            - 第二波商戶特權 <br /> - NFT及P2E發布，CG
-            NFT第三波發布(10,000個NFT，0.05 ETH=499.27港幣) <br /> -
-            第三波商戶特權公布 <br />- 應用程序第二版(社交功能)上線
-          </TimelineText>
-          <TImelineStamp>2024年Q3</TImelineStamp>
-          <TimelineText>
-            - 第三波商戶特權
-            <br /> - NFT及P2E發布
-            <br /> - 藍V獎勵計劃上線
-          </TimelineText>
-          <TImelineStamp>2024年Q4</TImelineStamp>
-          <TimelineText>
-            - 代幣獎勵計劃上線 <br />- 應用程序第三版（代幣和商戶POS功能）上線
-          </TimelineText>
-          <TImelineStamp>2025年Q1</TImelineStamp>
-          <TimelineText>- 第一波全球品牌及影響者評選特權上線</TimelineText>
-          <TImelineStamp length={timelineHeight + "px"} ref={ref1}>
-            2025年Q2
-          </TImelineStamp>
-          <TimelineText>- 第二波全球品牌及影響者評選特權上線</TimelineText>
-          <TImelineStamp length="0px" ref={ref2}>
-            2025年Q3
-          </TImelineStamp>
-          <TimelineText>- 第三波全球品牌及影響者評選特權上線</TimelineText>
+          {Object.entries(TIMELINE_DATA).map(([date, content], index) => (
+            <TimelineItem
+              key={index}
+              date={date}
+              content={content}
+              islast={index === Object.keys(TIMELINE_DATA).length - 1}
+            />
+          ))}
         </TimelineContainer>
       </S3Section>
     </S3>

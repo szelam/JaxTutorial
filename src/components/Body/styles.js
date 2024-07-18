@@ -259,7 +259,7 @@ export const TimelineContainer = styled.div`
   }
 `;
 
-export const TImelineStamp = styled.div`
+export const TimelineStamp = styled.div`
   border: 5px solid white;
   border-radius: 999px;
   padding: 35px;
@@ -283,7 +283,7 @@ export const TImelineStamp = styled.div`
     content: "";
     position: absolute;
     width: 5px;
-    height: ${({ length }) => length || "700px"};
+    height: ${({ length }) => length || "800px"};
     background-color: white;
     left: -51px;
     top: 50%;

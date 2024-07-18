@@ -5,7 +5,7 @@ export const Head = styled.header`
   width: 100%;
   position: relative;
   padding: 90px 95px;
-  margin-top: 80px;
+  margin-top: 70px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -41,6 +41,13 @@ export const BgImg = styled.img`
   top: 0;
   left: 0;
   z-index: -1;
+
+  @media (max-width: ${BREAKPOINT}px) {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    object-position: bottom;
+  }
 `;
 
 export const ActionButton = styled.button`
