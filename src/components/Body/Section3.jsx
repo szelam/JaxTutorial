@@ -5,6 +5,7 @@ import {
   StyledDiv,
   StyledSpan,
 } from "../../globalStyles";
+import Marquee from "../Marquee";
 import { CHARACTERS, TIMELINE_DATA } from "./constants";
 import Title from "./containers/Title";
 import {
@@ -14,7 +15,6 @@ import {
   CharacterBox,
   CharacterButtonsContainer,
   NFTImg,
-  NFTMarquee,
   S3,
   S3BgImg,
   S3Section,
@@ -30,7 +30,7 @@ export default function Section3() {
     <S3>
       <S3BgImg src="bageBg.png" alt="" />
       <S3Section>
-        <Title>角色介紹</Title>
+        <Title id="intro">角色介紹</Title>
         <CharacterBox>
           <StyledSpan color="#FF7E50" fontSize="90" sx={{ fontSize: "30" }}>
             {CHARACTERS[character].name}
@@ -85,22 +85,22 @@ export default function Section3() {
             ))}
           </CharacterButtonsContainer>
         </CharacterBottomGroup>
-        <Title>NFT畫廊</Title>
+        <Title id="nft">NFT畫廊</Title>
       </S3Section>
-      <NFTMarquee>
+      <Marquee>
         <NFTImg src="nft3.png" alt="" />
         <NFTImg src="nft1.png" alt="" />
         <NFTImg src="nft2.png" alt="" />
         <NFTImg src="nft3.png" alt="" />
-      </NFTMarquee>
-      <NFTMarquee speed={70} direction="right">
+      </Marquee>
+      <Marquee speed={70} direction="right">
         <NFTImg src="nft1.png" alt="" />
         <NFTImg src="nft2.png" alt="" />
         <NFTImg src="nft3.png" alt="" />
         <NFTImg src="nft1.png" alt="" />
-      </NFTMarquee>
+      </Marquee>
       <S3Section>
-        <Title>故事簡介</Title>
+        <Title id="story">故事簡介</Title>
       </S3Section>
       <StyledDiv width="100%" margin="40px 0 0 0">
         <FilledImage src="earth.png " />
@@ -115,7 +115,7 @@ export default function Section3() {
         >
           獅頭仔牙DAN收到佢嘅第一次任務地點,就係要去香港發掘好玩好食新元素,就係咁牙DAN就係香港開展咗探索之旅。
         </StyledSpan>
-        <StyledDiv margin="60px 0 0 0">
+        <StyledDiv margin="60px 0 0 0" sx={{ margin: "15px 0 0 0" }}>
           <FilledImage src="stroy.jpg" />
         </StyledDiv>
       </S3Section>

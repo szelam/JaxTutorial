@@ -50,6 +50,7 @@ export const FilledImage = styled.img`
   width: 100%;
   height: 100%;
   object-fit: ${({ objectFit }) => objectFit || "contain"};
+  object-position: ${({ objectPosition }) => objectPosition || "center"};
   position: ${({ absolute }) => (absolute ? "absolute" : "static")};
 `;
 
@@ -79,4 +80,12 @@ export const Divider = styled.div`
   width: 100%;
   height: ${({ height }) => height || "1px"};
   margin: ${({ margin = "10px 0" }) => margin};
+`;
+
+export const ContentContainer = styled.div`
+  padding-top: 70px;
+
+  @media (max-width: ${BREAKPOINT}px) {
+    padding-top: 40px;
+  }
 `;

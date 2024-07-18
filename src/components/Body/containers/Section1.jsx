@@ -9,7 +9,7 @@ import DisplayCard from "./DisplayCard";
 
 export default function Section1() {
   return (
-    <S1>
+    <S1 id="about">
       <S1BgImg src="top_bg-1.png" />
       <FlexDiv $gap="20" sx={{ flexDirection: "column" }}>
         <StyledDiv height="113px" sx={{ height: "197px" }} margin=" 0 0 20px 0">

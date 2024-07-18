@@ -1,18 +1,16 @@
 import styled from "styled-components";
 import { BREAKPOINT } from "../../constants";
 
-export const Head = styled.header`
+export const HomeContainer = styled.section`
   width: 100%;
   position: relative;
-  padding: 90px 95px;
-  margin-top: 70px;
+  padding: 90px 95px 150px 95px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
 
   @media (max-width: ${BREAKPOINT}px) {
-    margin-top: 40px;
-    padding: 40px 0 0 0;
+    padding: 40px 0 150px 0;
     align-items: center;
   }
 `;
@@ -30,7 +28,7 @@ export const TermsContainer = styled.span`
 
   @media (max-width: ${BREAKPOINT}px) {
     font-size: 9px;
-    margin: 35px 35px 160px 35px;
+    margin: 35px 35px 0 35px;
   }
 `;
 

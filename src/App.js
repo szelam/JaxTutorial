@@ -1,28 +1,41 @@
-import styled from "styled-components";
+import { useEffect, useState } from "react";
 import "./App.css";
 import Body from "./components/Body";
+import Dropdown from "./components/Dropdown";
 import Footer from "./components/Footer";
-import Header from "./components/Header";
+import Home from "./components/Home";
 import Navbar from "./components/Navbar";
 import UseMobile from "./components/UseMobile";
-
-export const ContentContainer = styled.div`
-  display: none;
-  @media (max-width: 1200px) {
-    display: block;
-  }
-`;
+import { ContentContainer } from "./globalStyles";
 
 function App() {
+  const [isMobile, setIsMobile] = useState(false);
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= window.innerHeight);
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
     <>
-      <ContentContainer>
-        <Navbar />
-        <Header />
-        <Body />
-        <Footer />
-      </ContentContainer>
-      <UseMobile />
+      {isMobile ? (
+        <>
+          <ContentContainer>
+            <Navbar open={open} setOpen={setOpen} />
+            <Dropdown open={open} setOpen={setOpen} />
+            <Home />
+            <Body />
+            <Footer />
+          </ContentContainer>
+        </>
+      ) : (
+        <UseMobile />
+      )}
     </>
   );
 }

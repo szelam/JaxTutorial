@@ -1,9 +1,15 @@
 import { useEffect, useState } from "react";
 import { BREAKPOINT } from "../../constants";
 import { FilledImage, StyledDiv } from "../../globalStyles";
-import { ActionButton, BgImg, Coin, Head, TermsContainer } from "./styles";
+import {
+  ActionButton,
+  BgImg,
+  Coin,
+  HomeContainer,
+  TermsContainer,
+} from "./styles";
 
-export default function Header() {
+export default function Home() {
   const [winW, setWinW] = useState(true);
 
   useEffect(() => {
@@ -20,7 +26,7 @@ export default function Header() {
   }, []);
 
   return (
-    <Head>
+    <HomeContainer>
       <BgImg
         src={`HomePromoteBanner${winW <= BREAKPOINT ? "mobile" : ""}.png`}
       />
@@ -29,9 +35,9 @@ export default function Header() {
           <FilledImage src="Web3TextMobile.png" />
         </>
       ) : (
-        <StyledDiv margin="0 420px 0 0">
-          <StyledDiv width="100%" height="210px" margin="0 0 15px 0">
-            <FilledImage src="web3Text.png" />
+        <StyledDiv margin="0 40vw 0 0">
+          <StyledDiv width="100%" height="15vh" margin="0 0 15px 0">
+            <FilledImage src="web3Text.png" objectPosition="left" />
           </StyledDiv>
         </StyledDiv>
       )}
@@ -53,6 +59,6 @@ export default function Header() {
         <br />
         *只首5,000 名完成登記之會員，送完即止。
       </TermsContainer>
-    </Head>
+    </HomeContainer>
   );
 }

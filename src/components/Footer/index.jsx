@@ -1,15 +1,26 @@
+import { useEffect, useState } from "react";
 import { BREAKPOINT } from "../../constants";
-import {
-  FilledImage,
-  FlexDiv,
-  StyledDiv,
-  StyledSpan,
-} from "../../globalStyles";
-import { ActionButton, Banner, Foot } from "./styles";
+import { FlexDiv, StyledSpan } from "../../globalStyles";
+import MemberButton from "../MemberButton.jsx";
+import { Banner, Foot } from "./styles";
 
-export default function Footer({ winW }) {
+export default function Footer() {
+  const [winW, setWinW] = useState(true);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWinW(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+    handleResize();
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
   return (
-    <Foot>
+    <Foot id="foot">
       <Banner src="banner_02.png" />
       <FlexDiv sx={{ flexDirection: "column", justifyContent: "center" }}>
         <StyledSpan
@@ -21,15 +32,11 @@ export default function Footer({ winW }) {
           <StyledSpan color="#EA7500" $fontWeight="600">
             無盡優惠
           </StyledSpan>
+          !
         </StyledSpan>
-        <ActionButton>
-          <StyledDiv width="42px" height="33px">
-            <FilledImage src="whiteicon.png" />
-          </StyledDiv>
-          成為會員
-        </ActionButton>
+        <MemberButton responsive={false} />
       </FlexDiv>
-      <StyledSpan fontSize="12">
+      <StyledSpan fontSize="12" sx={{ margin: "20px 0 0 0" }}>
         | <a>條款及細則</a> | <a>私隱政策</a> | <a>聯絡我們: xxxx xxxx</a> |
       </StyledSpan>
       <StyledSpan fontSize="9">Copyright© owned by Chaingate</StyledSpan>

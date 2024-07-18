@@ -1,4 +1,3 @@
-import Marquee from "react-fast-marquee";
 import styled from "styled-components";
 import { BREAKPOINT } from "../../constants";
 
@@ -227,14 +226,6 @@ export const S3TimelineBgImg = styled.img`
   }
 `;
 
-export const NFTMarquee = styled(Marquee)`
-  margin-top: 30px;
-
-  @media (max-width: ${BREAKPOINT}px) {
-    margin-top: 15px;
-  }
-`;
-
 export const NFTImg = styled.img`
   width: 297px;
   height: 296px;
@@ -249,8 +240,7 @@ export const NFTImg = styled.img`
 
 export const TimelineContainer = styled.div`
   width: 100%;
-  margin: 150px 0px 150px 0px;
-  padding: 0 200px;
+  padding: 150px 200px;
   font-size: 30px;
   color: white;
 
@@ -283,7 +273,7 @@ export const TimelineStamp = styled.div`
     content: "";
     position: absolute;
     width: 5px;
-    height: ${({ length }) => length || "800px"};
+    height: ${({ length }) => length};
     background-color: white;
     left: -51px;
     top: 50%;
@@ -300,18 +290,19 @@ export const TimelineStamp = styled.div`
 
     &::after {
       left: -21px;
-      height: ${({ length }) => length || "300px"};
+      height: ${({ length }) => length};
     }
   }
 `;
 
 export const TimelineText = styled.p`
-  margin: 90px 50px 90px 70px;
-  padding: 20px;
+  margin: 0 50px 0 70px;
+  padding: 110px 20px;
   border-radius: 30px;
 
   @media (max-width: ${BREAKPOINT}px) {
-    margin: 45px 25px 45px 35px;
+    margin: 0 25px 0 35px;
+    padding: 42.5px 20px;
   }
 `;
 

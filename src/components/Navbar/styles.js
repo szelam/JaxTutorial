@@ -1,17 +1,17 @@
 import styled from "styled-components";
 import { BREAKPOINT } from "../../constants";
 
-export const Nav = styled.nav`
+export const Head = styled.header`
   top: 0px;
   left: 0px;
   position: fixed;
-  z-index: 10;
+  z-index: 20;
   width: 100vw;
   height: 100px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #f5f3fc 0% 0% no-repeat padding-box;
+  background: #f5f3fc;
   box-shadow: 0px 0px 6px #5550e833;
   border-radius: 0px 0px 30px 30px;
   opacity: 1;
@@ -30,6 +30,8 @@ export const Logo = styled.img`
   height: 100%;
 `;
 
-export const Menu = styled.img`
+export const MenuButton = styled.button`
   height: 50%;
+  background: none;
+  border: none;
 `;

@@ -1,10 +1,17 @@
-import { Logo, Menu, Nav } from "./styles";
+import { FilledImage } from "../../globalStyles";
+import { Head, Logo, MenuButton } from "./styles";
 
-export default function Navbar() {
+export default function Navbar({ open, setOpen, children }) {
   return (
-    <Nav>
+    <Head>
       <Logo src="logo.svg" />
-      <Menu src="menu.svg" />
-    </Nav>
+      <MenuButton
+        onClick={() => {
+          setOpen(!open);
+        }}
+      >
+        <FilledImage src={open ? "close.jpg" : "menu.svg"} />
+      </MenuButton>
+    </Head>
   );
 }

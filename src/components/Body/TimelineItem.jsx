@@ -1,8 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { TimelineStamp, TimelineText } from "./styles";
 
-const TIMELINE_TEXT_MARGIN = 90;
-
 export default function TimelineItem({ date, content, islast }) {
   const [lineHeight, setLineHeight] = useState(0);
   const stampRef = useRef(null);
@@ -14,8 +12,7 @@ export default function TimelineItem({ date, content, islast }) {
       if (stampRef.current && textRef.current) {
         const stampRect = stampRef.current.getBoundingClientRect();
         const textRect = textRef.current.getBoundingClientRect();
-        const height =
-          textRect.height + stampRect.height + 2 + TIMELINE_TEXT_MARGIN;
+        const height = textRect.height + stampRect.height + 2;
         setLineHeight(height);
       }
     };

@@ -37,7 +37,7 @@ export default function Section2() {
         </>
       </StyledDiv>
 
-      <FlexDiv margin="0" sx={{ margin: "0 80px -15px 0" }}>
+      <FlexDiv margin="0 80px -15px 0" sx={{ margin: "0" }}>
         <LionContainer>
           <FilledImage src="lion01.png" />
         </LionContainer>

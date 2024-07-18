@@ -36,20 +36,3 @@ export const Banner = styled.img`
     object-fit: contain;
   }
 `;
-
-export const ActionButton = styled.button`
-  width: 206px;
-  text-align: center;
-  height: 47px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  background: #5550e8;
-  border: none;
-  font-size: 15px;
-  color: #fff;
-  font-weight: 500;
-  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
-  border-radius: 66px;
-`;
