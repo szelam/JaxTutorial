@@ -8,7 +8,7 @@ import {
 import TimeViewModel from "../viewModel";
 
 export default function TimeSelector() {
-  const { time, timeItem, handleSelectTime, compareTime } = useContext(
+  const { viewDate, baseItem, handleSelectPeriod, getTimeState } = useContext(
     TimeViewModel.Context
   );
   const [ap, setAP] = useState("AM");
@@ -24,21 +24,26 @@ export default function TimeSelector() {
         </AMPMButton>
       </AMPMSelectorContainer>
       <TimeItemsContainer>
-        {timeItem.map((item, index) => {
-          const apTime = time[ap];
-          const select = compareTime(apTime, item);
-          return (
-            <TimeItem
-              key={index}
-              selected={select}
-              onClick={() => {
-                handleSelectTime(item, ap);
-              }}
-            >
-              {item}
-            </TimeItem>
-          );
-        })}
+        {viewDate ? (
+          baseItem.timeSlots[ap].map((timeSlot, index) => {
+            const state = getTimeState(timeSlot);
+            return (
+              <TimeItem
+                key={index}
+                state={state}
+                onClick={() => {
+                  if (state !== "inactive") {
+                    handleSelectPeriod(timeSlot, state);
+                  }
+                }}
+              >
+                {timeSlot.str}
+              </TimeItem>
+            );
+          })
+        ) : (
+          <div>Select date first </div>
+        )}
       </TimeItemsContainer>
     </>
   );

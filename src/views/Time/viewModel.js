@@ -1,216 +1,320 @@
 import { useEffect, useState } from "react";
 import BaseViewModel from "../../Helpers/BaseViewModel";
+import {
+  getAvailability,
+  getBookedPeriods,
+  getHolidays,
+  getServicePlan,
+} from "../../api/time";
+import { useAuth } from "../../providers/AuthProvider";
+import { getScrollContainer, scrollToToday } from "../../utils/scrollHelpers";
+import {
+  getDateSupposedIndex,
+  getDisplayDays,
+  getMonthsData,
+  getTimeSlots,
+  getTodayDate,
+  getYear,
+  toDateObj,
+} from "../../utils/timeHelpers";
 
 function useTime() {
-  const [dayItem, setDayItem] = useState(getDayItem());
-  const [timeItem, setTimeItem] = useState(getTimeItem());
-  const [dates, setDates] = useState(getDates());
-  const [viewMonth, setViewMonth] = useState(dates.months.textList[1]);
-  const [day, setDay] = useState({
-    date: dates.today,
-    month: dates.months.list[1],
+  /* ------------- states ------------- */
+  const { token } = useAuth();
+
+  const [loading, setLoading] = useState(true);
+  const [baseItem, setBaseItem] = useState({
+    displayDays: getDisplayDays(),
+    timeSlots: getTimeSlots(),
+    today: getTodayDate(),
+    months: getMonthsData(),
+    year: getYear(),
   });
-  const [time, setTime] = useState({
-    AM: { from: null, to: null },
-    PM: { from: null, to: null },
+  const [viewMonth, setViewMonth] = useState(baseItem.months.textList[1]);
+  const [viewDate, setViewDate] = useState(null);
+  const [storeBlockedPeriods, setStoreBlockedPeriods] = useState(new Set());
+  const [selectedPeriod, setSelectedPeriod] = useState({
+    startDate: null,
+    endDate: null,
   });
+  const [policy, setPolicy] = useState();
 
-  function getDayItem() {
-    const result = [];
-    const today = new Date();
-    today.setHours(0, 0, 0, 0); // Clear the time part for accurate comparison
+  /* ---------------------------------- */
+  /*              Funtions              */
+  /* ---------------------------------- */
 
-    // Calculate the start of the last month
-    const startOfLastMonth = new Date(
-      today.getFullYear(),
-      today.getMonth() - 1,
-      1
-    );
+  async function fetchData() {
+    const endDate = new Date();
+    endDate.setDate(endDate.getDate() + 2);
 
-    // Calculate the end of the next month
-    const endOfNextMonth = new Date(
-      today.getFullYear(),
-      today.getMonth() + 2,
-      0
-    );
+    setLoading(true);
+    try {
+      const [holiday, servicePlan, availability, bookedPeriods] =
+        await Promise.all([
+          getHolidays(token),
+          getServicePlan(token),
+          getAvailability(token),
+          getBookedPeriods(
+            token,
+            new Date().toISOString(),
+            endDate.toISOString()
+          ),
+        ]);
 
-    // Helper function to get day of the week as a string
-    const getDotw = (date) => {
-      const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-      return daysOfWeek[date.getDay()];
-    };
+      console.log(holiday, servicePlan, availability, bookedPeriods);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      // setLoading(false);
+    }
+  }
 
-    // Iterate from the start of last month to the end of next month
-    for (
-      let d = new Date(startOfLastMonth);
-      d <= endOfNextMonth;
-      d.setDate(d.getDate() + 1)
+  /**
+   * Gets the selected state for a given time slot based on the policy.
+   * @param {Object} timeSlot - The time slot object containing the time string and period.
+   * @returns {string} The selected state ("inactive", "no", "startLonely", "start", "end", "both").
+   */
+
+  // inactive: cannot be selected due to hourly policy
+  // blocked: cannot be selected due to min / max time
+  function getTimeState(timeSlot) {
+    const { startDate: selectedStart, endDate: selectedEnd } = selectedPeriod;
+
+    // Note: we can available periods for the current date, but bookTimeUnit & bookMaxUnit is get by the start date of selected period
+    const { availablePeriods } =
+      policy.byDay[getDateSupposedIndex(policy.publicHolidays, viewDate)];
+
+    const { bookTimeUnit, bookMaxUnit } = selectedStart
+      ? policy.byDay[
+          getDateSupposedIndex(policy.publicHolidays, selectedStart.getDate())
+        ]
+      : { bookTimeUnit: null, bookMaxUnit: null };
+
+    const slotTime = toDateObj(viewDate, timeSlot);
+
+    /* ---------- Handle policy --------- */
+
+    const isAvailable = availablePeriods.some((period) => {
+      const periodStart = new Date(slotTime);
+      periodStart.setHours(
+        parseInt(period.from.split(":")[0]),
+        parseInt(period.from.split(":")[1]),
+        0,
+        0
+      );
+      const periodEnd = new Date(slotTime);
+      periodEnd.setHours(
+        parseInt(period.to.split(":")[0]),
+        parseInt(period.to.split(":")[1]),
+        0,
+        0
+      );
+
+      return slotTime >= periodStart && slotTime < periodEnd;
+    });
+
+    if (!isAvailable) {
+      storeBlockedPeriods.add(slotTime);
+      return "inactive";
+    }
+
+    const slotTimeMs = slotTime.getTime();
+    const startTimeMs = selectedStart?.getTime();
+    const endTimeMs = selectedEnd?.getTime();
+
+    /* ---------- Handle selected state --------- */
+
+    if (slotTimeMs === startTimeMs) {
+      return selectedEnd ? "start" : "startLonely";
+    }
+
+    if (slotTimeMs === endTimeMs) {
+      return "end";
+    }
+
+    if (
+      startTimeMs &&
+      endTimeMs &&
+      slotTimeMs > startTimeMs &&
+      slotTimeMs < endTimeMs
     ) {
-      const day = d.getDate();
-      const month = d.getMonth();
-      const dotw = getDotw(d);
-
-      // Determine the status
-      let type = "inactive";
-      const diffInDays = Math.floor((d - today) / (1000 * 60 * 60 * 24));
-      if (diffInDays === 0) {
-        type = "today";
-      } else if (diffInDays > 0 && diffInDays <= 2) {
-        type = "active";
-      }
-
-      result.push({ day, month, dotw, type });
+      return "both";
     }
 
-    return result;
-  }
+    if (startTimeMs && slotTimeMs > startTimeMs) {
+      /* -------- Handle min / max -------- */
+      // When there is start time, time slots where the time is X multiple of bookTimeUnit away from start will be "no". Otherwise, slots will be "blocked".
+      // Additionally, time slots a distance bookMaxUnits * bookTimeUnit away from start will also be "blocked".
+      const timeDiff = Math.abs(slotTimeMs - startTimeMs);
+      const minuteDiff = Math.floor(timeDiff / (bookTimeUnit * 1000));
 
-  function getTimeItem() {
-    const times = [];
-    for (let hour = 0; hour < 12; hour++) {
-      for (let minute = 0; minute < 60; minute += 15) {
-        const formattedHour = hour;
-        const formattedMinute = minute < 10 ? `0${minute}` : minute;
-        times.push(`${formattedHour}:${formattedMinute}`);
+      if (minuteDiff % bookTimeUnit !== 0) {
+        return "blocked";
+      }
+
+      if (bookMaxUnit && minuteDiff > bookMaxUnit * bookTimeUnit) {
+        return "blocked";
+      }
+
+      /* ----- Handle blocked periods ----- */
+      // Check if any BP lies in the interval selectedStart and slotTime
+      for (const blockedDate of storeBlockedPeriods) {
+        if (blockedDate >= selectedStart && blockedDate <= slotTime) {
+          return "blocked";
+        }
       }
     }
-    return times;
+
+    return "no";
   }
 
-  function getDates() {
-    const today = new Date();
-    const todayDate = today.getDate();
-    const months = [
-      today.getMonth() - 1,
-      today.getMonth(),
-      today.getMonth() + 1,
-    ];
-    const monthsObj = {
-      list: months,
-      textList: months.map((month) => {
-        const date = new Date(today.getFullYear(), month, 1);
-        return date.toLocaleString("default", { month: "short" });
-      }, []),
-    };
-    const year = today.getFullYear();
+  function getDateState(item) {
+    const { date, type } = item;
 
-    return { today: todayDate, months: monthsObj, year: year };
+    if (type === "inactive") return "inactive";
+
+    const dateOfItemIndex = getDateSupposedIndex(policy.publicHolidays, date);
+    if (!policy.openingDays.includes(dateOfItemIndex)) return "inactive";
+
+    const { startDate: selectedStart, endDate: selectedEnd } = selectedPeriod;
+
+    if (selectedStart && selectedEnd) {
+      const currentDate = new Date();
+      const currentYear = currentDate.getFullYear();
+      const currentMonth = currentDate.getMonth();
+      const checkDate = new Date(currentYear, currentMonth, date);
+      const startDay = selectedStart.getDate();
+      const endDay = selectedEnd.getDate();
+
+      if (checkDate.getDate() >= startDay && checkDate.getDate() <= endDay) {
+        return "selected";
+      }
+    }
+    if (date === viewDate) {
+      return "focused";
+    }
   }
 
-  function scrollToToday() {
-    const { scrollContainer, breakpoints } = getScrollContainer();
-    const breakpoint =
-      day.month + 1 - dates.months.list[dates.months.list.length - 1];
-    scrollContainer.scrollLeft =
-      breakpoints[breakpoint] + 8 + (59 + 16) * (day.date - 1);
+  /* ---------------------------------- */
+  /*              handlers              */
+  /* ---------------------------------- */
+
+  function handleToToday() {
+    scrollToToday(
+      baseItem.today,
+      baseItem.months.list[0],
+      baseItem.months.list
+    );
   }
+
+  function handleClear() {
+    setSelectedPeriod({
+      startDate: null,
+      endDate: null,
+    });
+  }
+
+  function handleSelectDate(type, date) {
+    if (type === "inactive") {
+      return;
+    }
+    console.log(`Set view date to ${date}`);
+    setViewDate(date);
+  }
+
+  function handleSelectPeriod(timeSlot, state) {
+    const slotTime = toDateObj(viewDate, timeSlot);
+    if (
+      (!selectedPeriod.startDate && !selectedPeriod.endDate) ||
+      state === "blocked"
+    ) {
+      console.log("Setting initial start date");
+      setSelectedPeriod({
+        startDate: slotTime,
+        endDate: null,
+      });
+    } else if (
+      slotTime > selectedPeriod.startDate &&
+      slotTime <= selectedPeriod.endDate
+    ) {
+      console.log("Resetting start date within existing range");
+      setSelectedPeriod({
+        startDate: slotTime,
+        endDate: null,
+      });
+    } else if (slotTime < selectedPeriod.startDate) {
+      console.log("Setting new start date before existing start date");
+      setSelectedPeriod({
+        startDate: slotTime,
+        endDate: null,
+      });
+    } else if (slotTime > selectedPeriod.startDate) {
+      console.log("Setting end date");
+      setSelectedPeriod((prev) => ({
+        ...prev,
+        endDate: slotTime,
+      }));
+    } else {
+      setSelectedPeriod((prev) => ({
+        startDate: null,
+        endDate: null,
+      }));
+    }
+  }
+
+  /* ---------------------------------- */
+  /*              useEffect             */
+  /* ---------------------------------- */
 
   function handleScroll(scrollContainer, breakpoints) {
     const scrollLeft = scrollContainer.scrollLeft;
     if (scrollLeft < breakpoints[0]) {
-      setViewMonth(dates.months.textList[0]);
+      setViewMonth(baseItem.months.textList[0]);
     } else if (scrollLeft < breakpoints[1]) {
-      setViewMonth(dates.months.textList[1]);
+      setViewMonth(baseItem.months.textList[1]);
     } else {
-      setViewMonth(dates.months.textList[2]);
+      setViewMonth(baseItem.months.textList[2]);
     }
-  }
-
-  function handleToToday() {
-    scrollToToday();
-  }
-
-  function handleClear() {
-    setTime({
-      AM: { from: null, to: null },
-      PM: { from: null, to: null },
-    });
-  }
-
-  function handleSelectDay(type) {
-    if (type === "inactive") {
-      return;
-    }
-  }
-
-  function getScrollContainer() {
-    const scrollContainer = document.getElementById("scrollContainer");
-
-    const totalWidth = scrollContainer.scrollWidth;
-    console.log("Total content width:", totalWidth);
-    const breakpoint1 = totalWidth / 3;
-    const breakpoint2 = (totalWidth / 3) * 2;
-    return { scrollContainer, breakpoints: [breakpoint1, breakpoint2] };
-  }
-
-  function handleSelectTime(item, ap) {
-    const newTime = { ...time };
-    const newTimeAP = newTime[ap];
-    if (!newTimeAP.from && !newTimeAP.to) {
-      newTimeAP.from = item;
-    } else if (newTimeAP.from && !newTimeAP.to) {
-      if (
-        Number(newTimeAP.from.replace(":", "")) < Number(item.replace(":", ""))
-      ) {
-        newTimeAP.to = item;
-      } else {
-        newTimeAP.to = newTimeAP.from;
-        newTimeAP.from = item;
-      }
-    } else {
-      newTimeAP.from = item;
-      newTimeAP.to = null;
-    }
-    setTime(newTime);
-  }
-
-  function compareTime(time, item) {
-    if (!time.from && !time.to) {
-      return "no";
-    }
-    if (time.from === item && time.to === null) {
-      return "startLonely";
-    } else if (time.from === item && time.to !== null) {
-      return "start";
-    } else if (time.to === item) {
-      return "end";
-    }
-    if (time.from && time.to) {
-      const nTimeFrom = Number(time.from.replace(":", ""));
-      const nTimeTo = Number(time.to.replace(":", ""));
-      const nItem = Number(item.replace(":", ""));
-      if (nItem > nTimeFrom && nItem < nTimeTo) {
-        return "both";
-      }
-    }
-    return "no";
   }
 
   useEffect(() => {
-    scrollToToday();
-    const { scrollContainer, breakpoints } = getScrollContainer();
+    const initializeData = async () => {
+      await fetchData();
+      const { scrollContainer, breakpoints } = getScrollContainer();
 
-    scrollContainer.addEventListener("scroll", () =>
-      handleScroll(scrollContainer, breakpoints)
-    );
+      if (!scrollContainer) return;
 
-    return () => {
-      scrollContainer.removeEventListener("scroll", handleScroll);
+      const handleScrollWrapper = () =>
+        handleScroll(scrollContainer, breakpoints, setViewMonth, baseItem);
+      scrollContainer.addEventListener("scroll", handleScrollWrapper);
+
+      return () => {
+        scrollContainer.removeEventListener("scroll", handleScrollWrapper);
+      };
     };
+
+    initializeData();
   }, []);
+
+  useEffect(() => {
+    if (!loading) handleToToday();
+  }, [loading]);
+
+  /* ------------- return ------------- */
 
   return {
     handleToToday,
     handleClear,
-    handleSelectDay,
-    handleSelectTime,
-    compareTime,
-    dayItem,
-    timeItem,
-    dates,
+    handleSelectDate,
+    handleSelectPeriod,
+    getDateState,
+    getTimeState,
+    loading,
+    policy,
+    viewDate,
+    baseItem,
     viewMonth,
-    day,
-    time,
+    selectedPeriod,
   };
 }
 

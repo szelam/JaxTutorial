@@ -9,34 +9,30 @@ import {
 import TimeViewModel from "../viewModel";
 
 export default function DaySelector() {
-  const { dayItem, viewMonth, dates, handleSelectDay, day } = useContext(
+  const { baseItem, viewMonth, handleSelectDate, getDateState } = useContext(
     TimeViewModel.Context
   );
 
   return (
     <DaySelectorContainer>
       <MonthContainer>
-        <StyledP textAlign="center" fontSize="24">
+        <StyledP $textAlign="center" fontSize="24">
           {viewMonth}
         </StyledP>
-        <StyledP textAlign="center" fontSize="20">
-          {dates.year}
+        <StyledP $textAlign="center" fontSize="20">
+          {baseItem.year}
         </StyledP>
       </MonthContainer>
       <Scroller id="scrollContainer">
-        {dayItem.map((item, index) => (
+        {baseItem.displayDays.map((item, index) => (
           <DayItem
             key={index}
-            type={
-              item.day === day.date && item.month === day.month
-                ? "selected"
-                : item.type
-            }
+            state={getDateState(item)}
             onClick={() => {
-              handleSelectDay(item.type);
+              handleSelectDate(item.type, item.date);
             }}
           >
-            <StyledP fontSize="24">{item.day}</StyledP>
+            <StyledP fontSize="24">{item.date}</StyledP>
             <StyledP fontSize="12">{item.dotw}</StyledP>
           </DayItem>
         ))}

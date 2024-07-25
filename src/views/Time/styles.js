@@ -57,7 +57,7 @@ export const MonthContainer = styled.div`
 export const StyledP = styled.p`
   margin: 0;
   font-size: ${({ fontSize }) => fontSize || 16}px;
-  text-align: ${({ textAlign }) => textAlign || "left"};
+  text-align: ${({ $textAlign }) => $textAlign || "left"};
 `;
 
 export const Scroller = styled.div`
@@ -71,11 +71,11 @@ export const Scroller = styled.div`
 
 export const DayItem = styled.button`
   border: 2px solid
-    ${({ theme, type }) => {
-      switch (type) {
+    ${({ theme, state }) => {
+      switch (state) {
         case "inactive":
           return theme.palette.secondary.inactive;
-        case "today":
+        case "focused":
           return theme.palette.primary.main;
         case "selected":
           return theme.palette.primary.main;
@@ -83,8 +83,8 @@ export const DayItem = styled.button`
           return theme.palette.secondary.main;
       }
     }};
-  background-color: ${({ theme, type }) => {
-    switch (type) {
+  background-color: ${({ theme, state }) => {
+    switch (state) {
       case "selected":
         return theme.palette.primary.main;
       case "inactive":
@@ -93,8 +93,8 @@ export const DayItem = styled.button`
         return "white";
     }
   }};
-  color: ${({ theme, type }) => {
-    switch (type) {
+  color: ${({ theme, state }) => {
+    switch (state) {
       case "selected":
         return "white";
       case "inactive":
@@ -147,13 +147,30 @@ export const TimeItemsContainer = styled.div`
 `;
 
 export const TimeItem = styled.button`
-  border: 2px solid ${({ theme }) => theme.palette.primary.main};
-  padding: 8px 0px;
-  margin: ${({ selected }) => {
-    switch (selected) {
+  border: 2px solid
+    ${({ theme, state }) => {
+      switch (state) {
+        case "blocked":
+          return theme.palette.secondary.inactive;
+        case "inactive":
+          return theme.palette.secondary.inactive;
+        default:
+          return theme.palette.primary.main;
+      }
+    }};
+  padding: ${({ state }) => {
+    switch (state) {
+      case "end":
+        return "8px 0 8px 4px";
       case "start":
-        return "4px 0 4px 4px";
-      case "startLonely":
+        return "8px 4px 8px 0";
+      default:
+        return "8px 0px";
+    }
+  }};
+  margin: ${({ state }) => {
+    switch (state) {
+      case "start":
         return "4px 0 4px 4px";
       case "end":
         return "4px 4px 4px 0";
@@ -163,8 +180,8 @@ export const TimeItem = styled.button`
         return "4px";
     }
   }};
-  border-radius: ${({ selected }) => {
-    switch (selected) {
+  border-radius: ${({ state }) => {
+    switch (state) {
       case "start":
         return "1000px 0 0 1000px";
       case "end":
@@ -175,9 +192,28 @@ export const TimeItem = styled.button`
         return "1000px";
     }
   }};
-  background-color: ${({ theme, selected }) =>
-    selected === "no" ? "white" : theme.palette.primary.main};
-  color: ${({ theme, selected }) => (selected === "no" ? "black" : "white")};
+  background-color: ${({ theme, state }) => {
+    switch (state) {
+      case "no":
+        return "white";
+      case "blocked":
+        return "transparent";
+      case "inactive":
+        return theme.palette.secondary.inactive;
+      default:
+        return theme.palette.primary.main;
+    }
+  }};
+  color: ${({ theme, state }) => {
+    switch (state) {
+      case "no":
+        return "black";
+      case "blocked":
+        return theme.palette.secondary.inactive;
+      default:
+        return "white";
+    }
+  }};
   cursor: pointer;
   min-width: 9%;
 `;
