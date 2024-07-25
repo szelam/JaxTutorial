@@ -10,7 +10,7 @@
     "@hookform/resolvers": "^3.5.0",
     "@mui/icons-material": "^5.15.19",
     "@mui/material": "^5.15.19",
-    "@mui/x-date-pickers": "^7.6.2",
+    "@mui/x-date-pickers": "^7.8.0",
     "@react-google-maps/api": "^2.19.3",
     "@szelam95/ck-editor": "^0.0.1",
     "@testing-library/jest-dom": "^5.17.0",
@@ -31,7 +31,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "jest",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -51,5 +51,11 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
   }
 }

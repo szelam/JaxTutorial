@@ -1,4 +1,12 @@
-import React, { useEffect, useContext } from "react";
+import { yupResolver } from "@hookform/resolvers/yup";
+import React, { useEffect } from "react";
+import { FormProvider, useForm } from "react-hook-form";
+import { API_URL } from "../../constants/api";
+import { useAuth } from "../../providers/AuthProvider";
+import LeftContainer from "./containers/LeftContainer";
+import RightContainer from "./containers/RightContainer";
+import TncContainer from "./containers/TncContainer";
+import schema from "./schema";
 import {
   ActionRow,
   Container,
@@ -6,65 +14,49 @@ import {
   CustomSecondaryButton,
   SwitchContainer,
 } from "./styles";
-import { FormProvider, useForm } from "react-hook-form";
-import RightContainer from "./containers/RightContainer";
-import LeftContainer from "./containers/LeftContainer";
-import TncContainer from "./containers/TncContainer";
-import schema from "./schema";
-import { useAuth } from "../../providers/AuthProvider";
-import { Navigate } from 'react-router-dom';
-import { yupResolver } from "@hookform/resolvers/yup";
-import { API_URL } from "../../constants/api";
+
+const CARPARK_ID = "62f2106a1aa3d91e23a191a8";
 
 export default function CarParkDetail() {
-  const { token, setCarParkId } = useAuth();
+  const { token, setCarParkId, merchantID } = useAuth();
   const methods = useForm({
     resolver: yupResolver(schema),
     defaultValues: schema.cast(),
   });
-  const [redirect, setRedirect] = React.useState(false);
-
 
   useEffect(() => {
-    if (!token && !redirect) {
-      setRedirect(true);
-      alert('You are not authenticated. Redirecting to login page.'); // This is ran twice because of Strict Mode in development.
-    } else {
-      getCarParkDetail();
-    }
-  }, [token, redirect]);
-
-  if (!token) {
-    return <Navigate to="/" replace />;
-  }
+    if (merchantID) getCarParkDetail();
+  }, [merchantID]);
 
   const getCarParkDetail = async () => {
     try {
-      const carparkdetail = await fetch(API_URL + "/carpark/661f8ed773794299a25a1717", {
-        method: "GET",
-        headers: {
-          Authorization: "Bearer " + token,
-        },
-      });
+      const carparkdetail = await fetch(
+        API_URL + `/carpark/${CARPARK_ID}` + "?Merchant=" + merchantID,
+        {
+          method: "GET",
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        }
+      );
 
       const carparkdetailData = await carparkdetail.json();
-      console.log(carparkdetailData.records[0]);
 
-      setCarParkId("661f8ed773794299a25a1717");
+      setCarParkId(CARPARK_ID);
 
       methods.reset(carparkdetailData.records[0]);
     } catch {
-      alert('Error fetching car park detail');
+      alert("Error fetching car park detail");
     }
-  }
+  };
 
   const onSubmit = (data) => {
-    alert('Submitted');
+    alert("Submitted");
     console.log(data);
   };
 
   const onError = (errors, e) => {
-    alert('Submitted with errors');
+    alert("Submitted with errors");
     console.log(errors, e);
   };
 
