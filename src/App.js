@@ -2,9 +2,11 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./App.css";
 import PrivateRoute from "./components/PrivateRoute.jsx";
 import { AuthProvider } from "./providers/AuthProvider";
+import Availability from "./views/Availability";
 import CarParkDetail from "./views/CarParkDetail";
 import Login from "./views/login";
 import Test from "./views/Test";
+import Time from "./views/Time";
 
 const router = createBrowserRouter([
   {
@@ -18,6 +20,14 @@ const router = createBrowserRouter([
   {
     path: "/cpd",
     element: <PrivateRoute component={<CarParkDetail />} />,
+  },
+  {
+    path: "/ava",
+    element: <Availability />,
+  },
+  {
+    path: "/time",
+    element: <Time />,
   },
   {
     path: "*",

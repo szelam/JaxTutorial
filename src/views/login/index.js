@@ -77,6 +77,7 @@ export default function Login() {
   };
 
   const onError = (errors, e) => console.log(errors, e);
+  const onError = (errors, e) => console.log(errors, e);
 
   return (
     <Container>

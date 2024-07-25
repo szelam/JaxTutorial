@@ -9,6 +9,7 @@ import { styled as MUIStyled } from "@mui/system";
 
 export const StyledFormControl = styled(FormControl)`
     width: ${({ width }) => width};
+    {...props => props.style};
 `;
 
 export const StyledInputLabel = MUIStyled(InputLabel)(({ theme, error }) => ({
