@@ -136,3 +136,16 @@ export function toDateObj(date, timeSlot) {
   );
   return slotTime;
 }
+
+export function createTimeFromString(baseDate, timeString) {
+  const [hours, minutes] = timeString.split(":").map(Number);
+  const newDate = new Date(baseDate);
+  newDate.setHours(hours, minutes, 0, 0);
+  return newDate;
+}
+
+export function isTimeInPeriod(time, period, baseDate) {
+  const from = createTimeFromString(baseDate, period.from);
+  const to = createTimeFromString(baseDate, period.to);
+  return time >= from && time <= to;
+}

@@ -33,6 +33,7 @@ const schema = Yup.object().shape({
       /^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*[a-z]).{8,}$/,
       "Password is invalid: must contain at least 8 characters, one uppercase, one lowercase and one special character"
     ),
+  role: Yup.string().required("Role is required"),
 });
 
 export default function Login() {
@@ -40,12 +41,14 @@ export default function Login() {
     defaultValues: {
       Merchant: "",
       email: "",
-      password: "",
+      password: "Aa@123456",
+      role: "Admin", // Set a default value for role
     },
     mode: "all",
     resolver: yupResolver(schema),
   });
 
+  const { register } = methods;
   const { setSessionData } = useAuth();
   const navigate = useNavigate();
 
@@ -56,7 +59,7 @@ export default function Login() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ ...data, role: "Admin" }),
+        body: JSON.stringify(data),
       });
       const result = await response.json();
 
@@ -65,7 +68,7 @@ export default function Login() {
       }
 
       setSessionData(result.data.token);
-      navigate("/cpd");
+      navigate("/time");
     } catch (error) {
       if (error.message === "Unauthorized") {
         alert("Invalid credentials");
@@ -76,7 +79,6 @@ export default function Login() {
     }
   };
 
-  const onError = (errors, e) => console.log(errors, e);
   const onError = (errors, e) => console.log(errors, e);
 
   return (
@@ -95,6 +97,12 @@ export default function Login() {
               <CustomInput name="Merchant" label="Merchant" />
               <CustomInput name="email" label="Email" />
               <CustomPasswordInput />
+              <div>
+                <select {...register("role")}>
+                  <option value="Admin">Admin</option>
+                  <option value="Customer">Customer</option>
+                </select>
+              </div>
               <ForgotPasswordLink>
                 <a href="/#">Forgot Password?</a>
               </ForgotPasswordLink>

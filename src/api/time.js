@@ -8,7 +8,7 @@ export async function getHolidays(token) {
       Authorization: `Bearer ${token}`,
     },
   });
-  return response.data;
+  return response.data.records;
 }
 
 export async function getServicePlan(token) {
@@ -20,7 +20,19 @@ export async function getServicePlan(token) {
       },
     }
   );
-  return response.data;
+  return response.data.records;
+}
+
+export async function getPolicyPlan(token, id) {
+  const response = await axios.get(
+    `${API_URL}/policyPlan/${id}?_populate=HourlyPolicies`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return response.data.records;
 }
 
 export async function getAvailability(token) {
@@ -32,7 +44,7 @@ export async function getAvailability(token) {
       },
     }
   );
-  return response.data;
+  return response.data.records;
 }
 
 export async function getBookedPeriods(token, fromTimeStr, toTimeStr) {
@@ -44,5 +56,5 @@ export async function getBookedPeriods(token, fromTimeStr, toTimeStr) {
       },
     }
   );
-  return response.data;
+  return response.data.records;
 }

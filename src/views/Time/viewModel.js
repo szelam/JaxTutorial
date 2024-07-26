@@ -4,10 +4,13 @@ import {
   getAvailability,
   getBookedPeriods,
   getHolidays,
+  getPolicyPlan,
   getServicePlan,
 } from "../../api/time";
+import { DEFAULT_POLICY } from "../../constants/time";
 import { useAuth } from "../../providers/AuthProvider";
 import { getScrollContainer, scrollToToday } from "../../utils/scrollHelpers";
+import { processData } from "../../utils/timeDataHelpers";
 import {
   getDateSupposedIndex,
   getDisplayDays,
@@ -15,6 +18,7 @@ import {
   getTimeSlots,
   getTodayDate,
   getYear,
+  isTimeInPeriod,
   toDateObj,
 } from "../../utils/timeHelpers";
 
@@ -46,6 +50,7 @@ function useTime() {
   async function fetchData() {
     const endDate = new Date();
     endDate.setDate(endDate.getDate() + 2);
+    let newPolicy = DEFAULT_POLICY;
 
     setLoading(true);
     try {
@@ -61,11 +66,23 @@ function useTime() {
           ),
         ]);
 
-      console.log(holiday, servicePlan, availability, bookedPeriods);
+      newPolicy.publicHolidays = holiday.map((h) => h.date);
+      const { PolicyPlans, quota } = servicePlan[0];
+      const populatedPolicyPlans = await Promise.all(
+        PolicyPlans.map((p) => getPolicyPlan(token, p.PolicyPlan))
+      );
+      newPolicy = processData(
+        holiday,
+        populatedPolicyPlans,
+        quota,
+        availability,
+        bookedPeriods
+      );
     } catch (error) {
       console.error(error);
     } finally {
-      // setLoading(false);
+      setPolicy(newPolicy);
+      setLoading(false);
     }
   }
 
@@ -80,40 +97,28 @@ function useTime() {
   function getTimeState(timeSlot) {
     const { startDate: selectedStart, endDate: selectedEnd } = selectedPeriod;
 
-    // Note: we can available periods for the current date, but bookTimeUnit & bookMaxUnit is get by the start date of selected period
-    const { availablePeriods } =
+    // Note: we can active periods for the current date, but bookTimeUnit & bookMaxUnit is get by the start date of selected period
+    const activePeriods =
       policy.byDay[getDateSupposedIndex(policy.publicHolidays, viewDate)];
+
+    const slotTime = toDateObj(viewDate, timeSlot);
 
     const { bookTimeUnit, bookMaxUnit } = selectedStart
       ? policy.byDay[
           getDateSupposedIndex(policy.publicHolidays, selectedStart.getDate())
-        ]
+        ].find((p) => isTimeInPeriod(slotTime, p, viewDate)) || {
+          bookTimeUnit: null,
+          bookMaxUnit: null,
+        }
       : { bookTimeUnit: null, bookMaxUnit: null };
-
-    const slotTime = toDateObj(viewDate, timeSlot);
 
     /* ---------- Handle policy --------- */
 
-    const isAvailable = availablePeriods.some((period) => {
-      const periodStart = new Date(slotTime);
-      periodStart.setHours(
-        parseInt(period.from.split(":")[0]),
-        parseInt(period.from.split(":")[1]),
-        0,
-        0
-      );
-      const periodEnd = new Date(slotTime);
-      periodEnd.setHours(
-        parseInt(period.to.split(":")[0]),
-        parseInt(period.to.split(":")[1]),
-        0,
-        0
-      );
+    const isActive = activePeriods.some((period) =>
+      isTimeInPeriod(slotTime, period, slotTime)
+    );
 
-      return slotTime >= periodStart && slotTime < periodEnd;
-    });
-
-    if (!isAvailable) {
+    if (!isActive) {
       storeBlockedPeriods.add(slotTime);
       return "inactive";
     }
@@ -174,6 +179,12 @@ function useTime() {
     if (type === "inactive") return "inactive";
 
     const dateOfItemIndex = getDateSupposedIndex(policy.publicHolidays, date);
+    console.log(
+      date,
+      dateOfItemIndex,
+      policy.openingDays,
+      !policy.openingDays.includes(dateOfItemIndex)
+    );
     if (!policy.openingDays.includes(dateOfItemIndex)) return "inactive";
 
     const { startDate: selectedStart, endDate: selectedEnd } = selectedPeriod;

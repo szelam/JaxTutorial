@@ -27,7 +27,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/time",
-    element: <Time />,
+    element: <PrivateRoute component={<Time />} />,
   },
   {
     path: "*",
