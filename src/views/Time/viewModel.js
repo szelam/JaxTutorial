@@ -4,7 +4,6 @@ import {
   getAvailability,
   getBookedPeriods,
   getHolidays,
-  getPolicyPlan,
   getServicePlan,
 } from "../../api/time";
 import { DEFAULT_POLICY } from "../../constants/time";
@@ -15,10 +14,11 @@ import {
   getDateSupposedIndex,
   getDisplayDays,
   getMonthsData,
+  getTimeAsNumberOfMinutes,
   getTimeSlots,
   getTodayDate,
   getYear,
-  isTimeInPeriod,
+  to24Hours,
   toDateObj,
 } from "../../utils/timeHelpers";
 
@@ -36,7 +36,7 @@ function useTime() {
   });
   const [viewMonth, setViewMonth] = useState(baseItem.months.textList[1]);
   const [viewDate, setViewDate] = useState(null);
-  const [storeBlockedPeriods, setStoreBlockedPeriods] = useState(new Set());
+  const [blockedTimeSlots, setBlockedTimeSlots] = useState(new Set());
   const [selectedPeriod, setSelectedPeriod] = useState({
     startDate: null,
     endDate: null,
@@ -50,11 +50,13 @@ function useTime() {
   async function fetchData() {
     const endDate = new Date();
     endDate.setDate(endDate.getDate() + 2);
+
     let newPolicy = DEFAULT_POLICY;
+    let newBlockedTimeSlots = new Set();
 
     setLoading(true);
     try {
-      const [holiday, servicePlan, availability, bookedPeriods] =
+      const [holiday, servicePlan, policyPlans, bookedPeriods] =
         await Promise.all([
           getHolidays(token),
           getServicePlan(token),
@@ -65,61 +67,64 @@ function useTime() {
             endDate.toISOString()
           ),
         ]);
-
-      newPolicy.publicHolidays = holiday.map((h) => h.date);
-      const { PolicyPlans, quota } = servicePlan[0];
-      const populatedPolicyPlans = await Promise.all(
-        PolicyPlans.map((p) => getPolicyPlan(token, p.PolicyPlan))
-      );
-      newPolicy = processData(
+      ({ newPolicy, newBlockedTimeSlots } = processData(
         holiday,
-        populatedPolicyPlans,
-        quota,
-        availability,
+        policyPlans,
+        servicePlan[0].quota,
         bookedPeriods
-      );
+      ));
+      // ({ newPolicy, newBlockedTimeSlots } = processData(
+      //   HOLIDAYS,
+      //   POLICY_PLANS,
+      //   SERVICE_PLAN[0].quota,
+      //   BOOKED_PERIODS
+      // ));
     } catch (error) {
-      console.error(error);
+      alert(error);
     } finally {
       setPolicy(newPolicy);
+      setBlockedTimeSlots(newBlockedTimeSlots);
       setLoading(false);
     }
   }
 
-  /**
-   * Gets the selected state for a given time slot based on the policy.
-   * @param {Object} timeSlot - The time slot object containing the time string and period.
-   * @returns {string} The selected state ("inactive", "no", "startLonely", "start", "end", "both").
-   */
-
-  // inactive: cannot be selected due to hourly policy
+  // inactive: cannot be selected due to hourly policy or booking
   // blocked: cannot be selected due to min / max time
   function getTimeState(timeSlot) {
     const { startDate: selectedStart, endDate: selectedEnd } = selectedPeriod;
 
-    // Note: we can active periods for the current date, but bookTimeUnit & bookMaxUnit is get by the start date of selected period
     const activePeriods =
       policy.byDay[getDateSupposedIndex(policy.publicHolidays, viewDate)];
 
     const slotTime = toDateObj(viewDate, timeSlot);
+    const timeSlot24 = to24Hours(timeSlot);
 
-    const { bookTimeUnit, bookMaxUnit } = selectedStart
-      ? policy.byDay[
-          getDateSupposedIndex(policy.publicHolidays, selectedStart.getDate())
-        ].find((p) => isTimeInPeriod(slotTime, p, viewDate)) || {
-          bookTimeUnit: null,
-          bookMaxUnit: null,
-        }
-      : { bookTimeUnit: null, bookMaxUnit: null };
+    // The index of period where of activePeriods where timeSlot lies on.
+    // activePeriods has .from and .to (00:00 - 23:59). (timeSlot24 [minute, hour] )
+    // returns -1 if not found
+    const belongingPeriod = activePeriods.findIndex((period) => {
+      const periodStart = getTimeAsNumberOfMinutes(period.from);
+      const periodEnd = getTimeAsNumberOfMinutes(period.to);
+      const slotTimeInMinutes = getTimeAsNumberOfMinutes(timeSlot24);
+
+      return slotTimeInMinutes >= periodStart && slotTimeInMinutes <= periodEnd;
+    });
+
+    const { bookMinHours, bookMaxHours } = selectedStart
+      ? belongingPeriod >= 0
+        ? policy.byDay[
+            getDateSupposedIndex(policy.publicHolidays, selectedStart.getDate())
+          ][belongingPeriod]
+        : {
+            bookMinHours: null,
+            bookMaxHours: null,
+          }
+      : { bookMinHours: null, bookMaxHours: null };
 
     /* ---------- Handle policy --------- */
 
-    const isActive = activePeriods.some((period) =>
-      isTimeInPeriod(slotTime, period, slotTime)
-    );
-
-    if (!isActive) {
-      storeBlockedPeriods.add(slotTime);
+    if (belongingPeriod < 0 || blockedTimeSlots.has(slotTime.toISOString())) {
+      blockedTimeSlots.add(slotTime.toISOString());
       return "inactive";
     }
 
@@ -148,26 +153,30 @@ function useTime() {
 
     if (startTimeMs && slotTimeMs > startTimeMs) {
       /* -------- Handle min / max -------- */
-      // When there is start time, time slots where the time is X multiple of bookTimeUnit away from start will be "no". Otherwise, slots will be "blocked".
-      // Additionally, time slots a distance bookMaxUnits * bookTimeUnit away from start will also be "blocked".
+      // When there is start time, time slots where the time is X multiple of bookMinHours away from start will be "no". Otherwise, slots will be "blocked".
+      // Additionally, time slots a distance bookMaxHourss * bookMinHours away from start will also be "blocked".
       const timeDiff = Math.abs(slotTimeMs - startTimeMs);
-      const minuteDiff = Math.floor(timeDiff / (bookTimeUnit * 1000));
+      const minuteDiff = Math.floor(timeDiff / (60 * 1000));
 
-      if (minuteDiff % bookTimeUnit !== 0) {
+      if (minuteDiff % (bookMinHours * 60) !== 0) {
         return "blocked";
       }
 
-      if (bookMaxUnit && minuteDiff > bookMaxUnit * bookTimeUnit) {
+      if (bookMaxHours && minuteDiff > bookMaxHours * 60) {
         return "blocked";
       }
 
       /* ----- Handle blocked periods ----- */
       // Check if any BP lies in the interval selectedStart and slotTime
-      for (const blockedDate of storeBlockedPeriods) {
+      for (const blockedDateISO of blockedTimeSlots) {
+        const blockedDate = new Date(blockedDateISO);
         if (blockedDate >= selectedStart && blockedDate <= slotTime) {
           return "blocked";
         }
       }
+    }
+    if (startTimeMs && slotTimeMs < startTimeMs) {
+      return "blocked";
     }
 
     return "no";
@@ -179,12 +188,6 @@ function useTime() {
     if (type === "inactive") return "inactive";
 
     const dateOfItemIndex = getDateSupposedIndex(policy.publicHolidays, date);
-    console.log(
-      date,
-      dateOfItemIndex,
-      policy.openingDays,
-      !policy.openingDays.includes(dateOfItemIndex)
-    );
     if (!policy.openingDays.includes(dateOfItemIndex)) return "inactive";
 
     const { startDate: selectedStart, endDate: selectedEnd } = selectedPeriod;
@@ -225,8 +228,8 @@ function useTime() {
     });
   }
 
-  function handleSelectDate(type, date) {
-    if (type === "inactive") {
+  function handleSelectDate(state, date) {
+    if (state === "inactive") {
       return;
     }
     console.log(`Set view date to ${date}`);
@@ -291,14 +294,14 @@ function useTime() {
   useEffect(() => {
     const initializeData = async () => {
       await fetchData();
+
+      /* ------- Dynamic day display ------ */
+
       const { scrollContainer, breakpoints } = getScrollContainer();
-
       if (!scrollContainer) return;
-
       const handleScrollWrapper = () =>
         handleScroll(scrollContainer, breakpoints, setViewMonth, baseItem);
       scrollContainer.addEventListener("scroll", handleScrollWrapper);
-
       return () => {
         scrollContainer.removeEventListener("scroll", handleScrollWrapper);
       };

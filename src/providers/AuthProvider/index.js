@@ -26,7 +26,7 @@ export const AuthProvider = ({ children }) => {
     const newMerchantID = await getUserData(newToken);
     setMerchantID(newMerchantID);
     localStorage.setItem("token", newToken);
-    localStorage.setItem("expiry", new Date().getTime() + 1000 * 30); // 30 seconds
+    localStorage.setItem("expiry", new Date().getTime() + 1000 * 60 * 10); // 10 minutes
   };
 
   const removeSessionData = () => {

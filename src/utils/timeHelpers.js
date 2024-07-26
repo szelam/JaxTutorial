@@ -123,10 +123,7 @@ export function getDateSupposedIndex(publicHolidays, date) {
 }
 
 export function toDateObj(date, timeSlot) {
-  const split = timeSlot.str.split(":");
-  const hourInt = parseInt(split[0]);
-  const hour = hourInt + (timeSlot.period === "PM" && hourInt < 12 ? 12 : 0);
-  const minute = parseInt(split[1]);
+  const [hour, minute] = to24Hours(timeSlot);
   const slotTime = new Date(
     new Date().getFullYear(),
     new Date().getMonth(),
@@ -136,16 +133,22 @@ export function toDateObj(date, timeSlot) {
   );
   return slotTime;
 }
+export function to24Hours(timeSlot) {
+  const split = timeSlot.str.split(":");
+  const hourInt = parseInt(split[0]);
+  const hour = hourInt + (timeSlot.period === "PM" && hourInt < 12 ? 12 : 0);
+  const minute = parseInt(split[1]);
 
-export function createTimeFromString(baseDate, timeString) {
-  const [hours, minutes] = timeString.split(":").map(Number);
-  const newDate = new Date(baseDate);
-  newDate.setHours(hours, minutes, 0, 0);
-  return newDate;
+  return [hour, minute];
 }
 
-export function isTimeInPeriod(time, period, baseDate) {
-  const from = createTimeFromString(baseDate, period.from);
-  const to = createTimeFromString(baseDate, period.to);
-  return time >= from && time <= to;
+export function getTimeAsNumberOfMinutes(time) {
+  let timeParts;
+  if (!Array.isArray(time)) {
+    timeParts = time.split(":").map(Number);
+  } else {
+    timeParts = time;
+  }
+  const timeInMinutes = timeParts[0] * 60 + timeParts[1];
+  return timeInMinutes;
 }

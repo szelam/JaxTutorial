@@ -23,9 +23,9 @@ export default function TimeSelector() {
           PM
         </AMPMButton>
       </AMPMSelectorContainer>
-      <TimeItemsContainer>
-        {viewDate ? (
-          baseItem.timeSlots[ap].map((timeSlot, index) => {
+      {viewDate ? (
+        <TimeItemsContainer>
+          {baseItem.timeSlots[ap].map((timeSlot, index) => {
             const state = getTimeState(timeSlot);
             return (
               <TimeItem
@@ -40,11 +40,18 @@ export default function TimeSelector() {
                 {timeSlot.str}
               </TimeItem>
             );
-          })
-        ) : (
-          <div>Select date first </div>
-        )}
-      </TimeItemsContainer>
+          })}
+        </TimeItemsContainer>
+      ) : (
+        <div
+          style={{
+            width: "100%",
+            textAlign: "center",
+          }}
+        >
+          Select date!
+        </div>
+      )}
     </>
   );
 }

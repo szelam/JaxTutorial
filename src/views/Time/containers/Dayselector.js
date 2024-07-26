@@ -24,18 +24,21 @@ export default function DaySelector() {
         </StyledP>
       </MonthContainer>
       <Scroller id="scrollContainer">
-        {baseItem.displayDays.map((item, index) => (
-          <DayItem
-            key={index}
-            state={getDateState(item)}
-            onClick={() => {
-              handleSelectDate(item.type, item.date);
-            }}
-          >
-            <StyledP fontSize="24">{item.date}</StyledP>
-            <StyledP fontSize="12">{item.dotw}</StyledP>
-          </DayItem>
-        ))}
+        {baseItem.displayDays.map((item, index) => {
+          const state = getDateState(item);
+          return (
+            <DayItem
+              key={index}
+              state={state}
+              onClick={() => {
+                handleSelectDate(state, item.date);
+              }}
+            >
+              <StyledP fontSize="24">{item.date}</StyledP>
+              <StyledP fontSize="12">{item.dotw}</StyledP>
+            </DayItem>
+          );
+        })}
       </Scroller>
     </DaySelectorContainer>
   );

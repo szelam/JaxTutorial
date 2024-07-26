@@ -10,7 +10,12 @@ export function getScrollContainer() {
   return { scrollContainer, breakpoints: [breakpoint1, breakpoint2] };
 }
 
-export function scrollToToday(date, month, monthsList) {
+export function scrollToToday(date) {
   const { scrollContainer, breakpoints } = getScrollContainer();
-  scrollContainer.scrollLeft = breakpoints[0] + 8 + (59 + 16) * (date - 2);
+  const targetScrollLeft = breakpoints[0] + 8 + (59 + 16) * (date - 2);
+
+  scrollContainer.scrollTo({
+    left: targetScrollLeft,
+    behavior: "smooth",
+  });
 }
