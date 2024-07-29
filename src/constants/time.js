@@ -73,7 +73,7 @@ const TEST_CROSS_BP_POLICY = {
   },
 };
 
-export const DEFAULT_POLICY = TEST_CROSS_BP_POLICY;
+export const DEFAULT_POLICY = BASIC_POLICY;
 export const CARPARK_ID = "62f2106a1aa3d91e23a191a8";
 export const SERVICEPLAN_ID = "65ed8c16f34856943b1183e9";
 export const MERCHANT_ID = "62f0cf4078e1fefcacb7c973";

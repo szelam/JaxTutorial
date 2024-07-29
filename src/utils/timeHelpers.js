@@ -109,9 +109,14 @@ export function getYear() {
   return today.getFullYear();
 }
 
-export function getDateSupposedIndex(publicHolidays, date) {
+export function getDateSupposedIndex(publicHolidays, day, date = null) {
+  let convertedDate;
   const today = new Date();
-  const convertedDate = new Date(today.getFullYear(), today.getMonth(), date);
+  if (date !== null) {
+    convertedDate = date;
+  } else {
+    convertedDate = new Date(today.getFullYear(), today.getMonth(), day);
+  }
   if (
     publicHolidays.some(
       (holiday) => holiday.toDateString() === convertedDate.toDateString()
@@ -122,12 +127,12 @@ export function getDateSupposedIndex(publicHolidays, date) {
   return convertedDate.getDay() === 0 ? 6 : convertedDate.getDay() - 1;
 }
 
-export function toDateObj(date, timeSlot) {
+export function toDateObj(day, timeSlot) {
   const [hour, minute] = to24Hours(timeSlot);
   const slotTime = new Date(
     new Date().getFullYear(),
     new Date().getMonth(),
-    date,
+    day,
     hour,
     minute
   );

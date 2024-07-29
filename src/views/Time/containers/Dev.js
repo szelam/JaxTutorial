@@ -52,7 +52,14 @@ export default function Dev() {
         </div>
         <div style={{ padding: "20px" }}>
           <h3>Blocked Time Slots</h3>
-          <pre>{JSON.stringify(blockedTimeSlots, null, 2)}</pre>
+          <pre>
+            {blockedTimeSlots
+              .map((time) => {
+                const hktTime = new Date(new Date(time).getTime());
+                return hktTime.toString();
+              })
+              .join("\n")}
+          </pre>
         </div>
       </ModalContainer>
     </>

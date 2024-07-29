@@ -47,7 +47,6 @@ export const AuthProvider = ({ children }) => {
       removeSessionData();
     } else if (token) {
       const timeDifference = Math.floor((expiry - new Date().getTime()) / 1000);
-      console.log("Time difference in seconds:", timeDifference);
       setSessionData(token, merchantID); // refresh expiry
     }
   }, []);

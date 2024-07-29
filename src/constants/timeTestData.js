@@ -549,7 +549,7 @@ export const POLICY_PLANS = [
         to: "2025-12-30T16:00:00.000Z",
       },
       _id: "65d4446205391ae539121b5c",
-      openingDays: ["0", "1", "2", "3", "4", "5", "6", "7"],
+      openingDays: ["0", "2", "3", "4", "5", "6", "7"],
       type: "EVPolicyPlan",
       blockedPeriods: [],
       HourlyPolicies: [
@@ -563,16 +563,6 @@ export const POLICY_PLANS = [
           isPostContinued: true,
           min: 0.5,
           max: 2.5,
-        },
-        {
-          _id: "6669154b35d16dffbf0a4659",
-          from: "00:00",
-          to: "04:00",
-          weekday: "0",
-          PolicyPlan: "65d4446205391ae539121b5c",
-          isPrevContinued: true,
-          isPostContinued: true,
-          min: 1,
         },
         {
           _id: "6669154b35d16dffbf0a4656",
@@ -670,13 +660,23 @@ export const POLICY_PLANS = [
 
 export const BOOKED_PERIODS = [
   {
-    startDate: "2024-07-26T00:00:00.000Z",
-    endDate: "2024-07-26T01:00:00.000Z",
+    startDate: "2024-07-29T04:30:00.000Z",
+    endDate: "2024-07-29T05:30:00.000Z",
     ParkingSlot: "6626364faecffb4a391d2a81",
   },
   {
-    startDate: "2024-07-26T00:45:00.000Z",
-    endDate: "2024-07-26T02:00:00.000Z",
-    ParkingSlot: "6626364faecffb4a391d2a82",
+    startDate: "2024-07-29T04:15:00.000Z",
+    endDate: "2024-07-29T05:15:00.000Z",
+    ParkingSlot: "6626364faecffb4a391d2a81",
+  },
+  {
+    startDate: "2024-07-29T09:00:00.000Z",
+    endDate: "2024-07-29T10:00:00.000Z",
+    ParkingSlot: "6626364faecffb4a391d2a81",
+  },
+  {
+    startDate: "2024-07-29T09:30:00.000Z",
+    endDate: "2024-07-29T12:00:00.000Z",
+    ParkingSlot: "6626364faecffb4a391d2a81",
   },
 ];

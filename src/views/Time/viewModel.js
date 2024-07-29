@@ -7,6 +7,12 @@ import {
   getServicePlan,
 } from "../../api/time";
 import { DEFAULT_POLICY } from "../../constants/time";
+// import {
+//   BOOKED_PERIODS,
+//   HOLIDAYS,
+//   POLICY_PLANS,
+//   SERVICE_PLAN,
+// } from "../../constants/timeTestData";
 import { useAuth } from "../../providers/AuthProvider";
 import { getScrollContainer, scrollToToday } from "../../utils/scrollHelpers";
 import { processData } from "../../utils/timeDataHelpers";
@@ -36,7 +42,7 @@ function useTime() {
   });
   const [viewMonth, setViewMonth] = useState(baseItem.months.textList[1]);
   const [viewDate, setViewDate] = useState(null);
-  const [blockedTimeSlots, setBlockedTimeSlots] = useState(new Set());
+  const [blockedTimeSlots, setBlockedTimeSlots] = useState([]);
   const [selectedPeriod, setSelectedPeriod] = useState({
     startDate: null,
     endDate: null,
@@ -52,7 +58,7 @@ function useTime() {
     endDate.setDate(endDate.getDate() + 2);
 
     let newPolicy = DEFAULT_POLICY;
-    let newBlockedTimeSlots = new Set();
+    let newBlockedTimeSlots = [];
 
     setLoading(true);
     try {
@@ -123,8 +129,7 @@ function useTime() {
 
     /* ---------- Handle policy --------- */
 
-    if (belongingPeriod < 0 || blockedTimeSlots.has(slotTime.toISOString())) {
-      blockedTimeSlots.add(slotTime.toISOString());
+    if (blockedTimeSlots.includes(slotTime.toISOString())) {
       return "inactive";
     }
 
@@ -329,6 +334,7 @@ function useTime() {
     baseItem,
     viewMonth,
     selectedPeriod,
+    blockedTimeSlots,
   };
 }
 
